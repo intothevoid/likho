@@ -5,14 +5,15 @@ import (
 )
 
 type Config struct {
-	Title          string
-	URL            string
-	Language       string
-	Description    string
-	DateFormat     string
-	Author         string
-	FrontPagePosts int
-	PostsDirectory string // Add this line
+	Title           string
+	URL             string
+	Language        string
+	Description     string
+	DateFormat      string
+	Author          string
+	FrontPagePosts  int
+	PostsDirectory  string
+	SourceDirectory string
 }
 
 func Load() (*Config, error) {
