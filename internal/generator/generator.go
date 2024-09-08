@@ -1,13 +1,13 @@
 package generator
 
 import (
-	"github.com/yourusername/likho/internal/config"
-	"github.com/yourusername/likho/internal/parser"
-	"github.com/yourusername/likho/internal/post"
+	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/internal/parser"
+	"github.com/intothevoid/likho/internal/post"
 )
 
 func Generate(cfg *config.Config) error {
-	posts, err := parser.ParsePosts("posts")
+	posts, err := parser.ParsePosts(cfg.PostsDirectory)
 	if err != nil {
 		return err
 	}

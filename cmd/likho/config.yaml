@@ -1,0 +1,49 @@
+# Likho Configuration File
+
+# Site Information
+site:
+  title: "My Awesome Blog"
+  description: "A static site generated with Likho"
+  base_url: "https://example.com"
+  language: "en"
+
+# Author Information
+author: "John Doe <john@example.com>"
+
+# Content Settings
+content:
+  source_dir: "content"
+  output_dir: "public"
+  posts_per_page: 10
+
+# Theme Settings
+theme:
+  name: "default"
+  syntax_highlighting: true
+
+# Build Settings
+build:
+  draft: false
+  future: false
+
+# Server Settings
+server:
+  port: 8080
+  host: "localhost"
+
+# Social Media Links
+social:
+  twitter: "https://twitter.com/username"
+  github: "https://github.com/username"
+  linkedin: "https://linkedin.com/in/username"
+
+# Additional Features
+features:
+  comments: false
+  search: true
+  rss: true
+
+# Custom Variables
+custom:
+  google_analytics: "UA-XXXXXXXXX-X"
+  disqus_shortname: "your-disqus-shortname"

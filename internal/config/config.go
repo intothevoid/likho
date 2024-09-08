@@ -12,6 +12,7 @@ type Config struct {
 	DateFormat     string
 	Author         string
 	FrontPagePosts int
+	PostsDirectory string // Add this line
 }
 
 func Load() (*Config, error) {
@@ -26,6 +27,11 @@ func Load() (*Config, error) {
 	var cfg Config
 	if err := viper.Unmarshal(&cfg); err != nil {
 		return nil, err
+	}
+
+	// Set a default value for PostsDirectory if not specified in config
+	if cfg.PostsDirectory == "" {
+		cfg.PostsDirectory = "posts"
 	}
 
 	return &cfg, nil

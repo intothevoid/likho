@@ -16,7 +16,7 @@ Likho is a lightweight, fast, and simple static site generator written in Go. It
 
 2. Clone the repository:
    ```
-   git clone https://github.com/yourusername/likho.git
+   git clone https://github.com/intothevoid/likho.git
    cd likho
    ```
 

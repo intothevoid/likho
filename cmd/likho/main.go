@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/internal/generator"
+	"github.com/intothevoid/likho/internal/server"
 	"github.com/spf13/cobra"
-	"github.com/yourusername/likho/internal/config"
-	"github.com/yourusername/likho/internal/generator"
-	"github.com/yourusername/likho/internal/server"
 )
 
 func main() {
