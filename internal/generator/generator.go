@@ -7,7 +7,7 @@ import (
 )
 
 func Generate(cfg *config.Config) error {
-	posts, err := parser.ParsePosts(cfg.PostsDirectory)
+	posts, err := parser.ParsePosts(cfg.Content.PostsDir)
 	if err != nil {
 		return err
 	}

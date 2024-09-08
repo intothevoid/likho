@@ -5,15 +5,45 @@ import (
 )
 
 type Config struct {
-	Title           string
-	URL             string
-	Language        string
-	Description     string
-	DateFormat      string
-	Author          string
-	FrontPagePosts  int
-	PostsDirectory  string
-	SourceDirectory string
+	Site struct {
+		Title       string `mapstructure:"title"`
+		Description string `mapstructure:"description"`
+		BaseURL     string `mapstructure:"base_url"`
+		Language    string `mapstructure:"language"`
+	} `mapstructure:"site"`
+	Author  string `mapstructure:"author"`
+	Content struct {
+		SourceDir    string `mapstructure:"source_dir"`
+		PostsDir     string `mapstructure:"posts_dir"`
+		OutputDir    string `mapstructure:"output_dir"`
+		PostsPerPage int    `mapstructure:"posts_per_page"`
+	} `mapstructure:"content"`
+	Theme struct {
+		Name               string `mapstructure:"name"`
+		SyntaxHighlighting bool   `mapstructure:"syntax_highlighting"`
+	} `mapstructure:"theme"`
+	Build struct {
+		Draft  bool `mapstructure:"draft"`
+		Future bool `mapstructure:"future"`
+	} `mapstructure:"build"`
+	Server struct {
+		Port int    `mapstructure:"port"`
+		Host string `mapstructure:"host"`
+	} `mapstructure:"server"`
+	Social struct {
+		Twitter  string `mapstructure:"twitter"`
+		GitHub   string `mapstructure:"github"`
+		LinkedIn string `mapstructure:"linkedin"`
+	} `mapstructure:"social"`
+	Features struct {
+		Comments bool `mapstructure:"comments"`
+		Search   bool `mapstructure:"search"`
+		RSS      bool `mapstructure:"rss"`
+	} `mapstructure:"features"`
+	Custom struct {
+		GoogleAnalytics string `mapstructure:"google_analytics"`
+		DisqusShortname string `mapstructure:"disqus_shortname"`
+	} `mapstructure:"custom"`
 }
 
 func Load() (*Config, error) {
@@ -31,8 +61,8 @@ func Load() (*Config, error) {
 	}
 
 	// Set a default value for PostsDirectory if not specified in config
-	if cfg.PostsDirectory == "" {
-		cfg.PostsDirectory = "posts"
+	if cfg.Content.PostsDir == "" {
+		cfg.Content.PostsDir = "posts"
 	}
 
 	return &cfg, nil

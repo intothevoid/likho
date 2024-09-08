@@ -54,7 +54,10 @@ func main() {
 }
 
 func createCmd(cfg *config.Config) *cobra.Command {
-	return &cobra.Command{
+	var tags string
+	var featuredImage string
+
+	cmd := &cobra.Command{
 		Use:   "create [post-title]",
 		Short: "Create a new post",
 		Args:  cobra.ExactArgs(1),
@@ -63,32 +66,56 @@ func createCmd(cfg *config.Config) *cobra.Command {
 			slug := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 			date := time.Now().Format("2006-01-02")
 
-			postDir := filepath.Join(cfg.SourceDirectory, date)
-			err := os.MkdirAll(postDir, 0755)
-			if err != nil {
-				fmt.Printf("Error creating directory: %v\n", err)
-				return
+			// Create posts directory if it doesn't exist
+			postsDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.PostsDir, date)
+			if err := os.MkdirAll(postsDir, os.ModePerm); err != nil {
+				log.Fatalf("Failed to create posts directory: %v", err)
 			}
 
-			fileName := filepath.Join(postDir, slug+".md")
+			// Generate the filename
+			filename := filepath.Join(postsDir, slug+".md")
+
+			// Create the file
+			file, err := os.Create(filename)
+			if err != nil {
+				log.Fatalf("Failed to create file: %v", err)
+			}
+			defer file.Close()
+
+			// Process tags
+			tagList := []string{}
+			if tags != "" {
+				tagList = strings.Split(tags, ",")
+				for i, tag := range tagList {
+					tagList[i] = strings.TrimSpace(tag)
+				}
+			}
+
 			content := fmt.Sprintf(`---
 title: "%s"
 date: %s
 draft: true
+tags: [%s]
+featured_image: "%s"
 ---
 
 Your content here.
-`, title, date)
+`, title, date, strings.Join(tagList, ", "), featuredImage)
 
-			err = os.WriteFile(fileName, []byte(content), 0644)
+			err = os.WriteFile(filename, []byte(content), 0644)
 			if err != nil {
 				fmt.Printf("Error writing file: %v\n", err)
 				return
 			}
 
-			fmt.Printf("Created new post: %s\n", fileName)
+			fmt.Printf("Created new post: %s\n", filename)
 		},
 	}
+
+	cmd.Flags().StringVarP(&tags, "tags", "t", "", "Comma-separated list of tags")
+	cmd.Flags().StringVarP(&featuredImage, "image", "i", "", "URL of the featured image")
+
+	return cmd
 }
 
 func generateCmd(cfg *config.Config) *cobra.Command {
