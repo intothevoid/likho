@@ -67,7 +67,8 @@ func createCmd(cfg *config.Config) *cobra.Command {
 			date := time.Now().Format("2006-01-02")
 
 			// Create posts directory if it doesn't exist
-			postsDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.PostsDir, date)
+			// Create folder structure at root
+			postsDir := filepath.Join("../..", cfg.Content.SourceDir, cfg.Content.PostsDir, date)
 			if err := os.MkdirAll(postsDir, os.ModePerm); err != nil {
 				log.Fatalf("Failed to create posts directory: %v", err)
 			}
