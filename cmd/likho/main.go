@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
-	"strings"
-	"time"
 
 	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/generator"
+	"github.com/intothevoid/likho/internal/post"
 	"github.com/intothevoid/likho/internal/server"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -54,41 +52,7 @@ func main() {
 }
 
 func createCmd(cfg *config.Config) *cobra.Command {
-	return &cobra.Command{
-		Use:   "create [post-title]",
-		Short: "Create a new post",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			title := args[0]
-			slug := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-			date := time.Now().Format("2006-01-02")
-
-			postDir := filepath.Join(cfg.SourceDirectory, date)
-			err := os.MkdirAll(postDir, 0755)
-			if err != nil {
-				fmt.Printf("Error creating directory: %v\n", err)
-				return
-			}
-
-			fileName := filepath.Join(postDir, slug+".md")
-			content := fmt.Sprintf(`---
-title: "%s"
-date: %s
-draft: true
----
-
-Your content here.
-`, title, date)
-
-			err = os.WriteFile(fileName, []byte(content), 0644)
-			if err != nil {
-				fmt.Printf("Error writing file: %v\n", err)
-				return
-			}
-
-			fmt.Printf("Created new post: %s\n", fileName)
-		},
-	}
+	return post.CreatePost(cfg)
 }
 
 func generateCmd(cfg *config.Config) *cobra.Command {
