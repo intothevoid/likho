@@ -64,7 +64,7 @@ Likho provides several commands to manage your static site:
 
 Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:
 
-```
+```yaml
 site:
   title: "My Awesome Blog"
   description: "A blog about awesome things"
@@ -83,7 +83,8 @@ templates:
 static:
   dir: "static"
 
-Configuration options:
+```
+### Configuration options:
 
 - `site`:
   - `title`: The title of your blog
