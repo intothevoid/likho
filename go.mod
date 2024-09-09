@@ -1,6 +1,6 @@
 module github.com/intothevoid/likho
 
-go 1.22.0
+go 1.23.1
 
 require (
 	github.com/spf13/cobra v1.8.1
