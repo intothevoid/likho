@@ -33,7 +33,16 @@ Likho provides several commands to manage your static site:
 
 1. Create a new post:
    ```
-   ./likho create "My New Post"
+   ./likho create "My New Post" [flags]
+   ```
+   
+   Available flags:
+   - `-t, --tags string`: Comma-separated list of tags for the post
+   - `-i, --image string`: URL of the featured image for the post
+
+   Example:
+   ```
+   ./likho create "My New Post" -t "technology,golang" -i "https://example.com/image.jpg"
    ```
 
 2. Generate the static site:
@@ -54,3 +63,44 @@ Likho provides several commands to manage your static site:
 ## Configuration
 
 Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:
+
+```
+site:
+  title: "My Awesome Blog"
+  description: "A blog about awesome things"
+  baseURL: "https://example.com"
+
+content:
+  sourceDir: "content"
+  postsDir: "posts"
+
+output:
+  publicDir: "public"
+
+templates:
+  dir: "templates"
+
+static:
+  dir: "static"
+
+Configuration options:
+
+- `site`:
+  - `title`: The title of your blog
+  - `description`: A brief description of your blog
+  - `baseURL`: The base URL where your site will be hosted
+
+- `content`:
+  - `sourceDir`: The directory containing your content files
+  - `postsDir`: The subdirectory within `sourceDir` where posts are stored
+
+- `output`:
+  - `publicDir`: The directory where generated HTML files will be placed
+
+- `templates`:
+  - `dir`: The directory containing your HTML templates
+
+- `static`:
+  - `dir`: The directory containing static assets (CSS, images, etc.)
+
+Ensure that your `config.yaml` file is in the root directory of your Likho project.
