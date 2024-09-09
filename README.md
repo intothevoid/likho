@@ -12,7 +12,7 @@ Likho is a lightweight, fast, and simple static site generator written in Go. It
 
 ## Installation
 
-1. Ensure you have Go 1.22 or later installed on your system.
+1. Ensure you have Go 1.23 or later installed on your system.
 
 2. Clone the repository:
    ```
