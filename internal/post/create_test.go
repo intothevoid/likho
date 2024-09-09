@@ -17,7 +17,7 @@ func TestCreatePost(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
-	defer os.RemoveAll(tempDir)
+	defer os.RemoveAll(filepath.Join("../..", tempDir))
 
 	// Create a test config
 	cfg := &config.Config{
