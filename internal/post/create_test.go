@@ -13,6 +13,12 @@ import (
 func TestCreatePost(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir := "likho-test"
+	if _, err := os.Stat(tempDir); !os.IsNotExist(err) {
+		err = os.RemoveAll(tempDir)
+		if err != nil {
+			t.Fatalf("Failed to remove existing temp dir: %v", err)
+		}
+	}
 	err := os.Mkdir(tempDir, 0755)
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
