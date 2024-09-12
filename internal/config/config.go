@@ -16,6 +16,7 @@ type Config struct {
 		SourceDir    string `mapstructure:"source_dir"`
 		PostsDir     string `mapstructure:"posts_dir"`
 		OutputDir    string `mapstructure:"output_dir"`
+		TemplatesDir string `mapstructure:"templates_dir"` // Added this line
 		PostsPerPage int    `mapstructure:"posts_per_page"`
 	} `mapstructure:"content"`
 	Theme struct {
@@ -60,9 +61,12 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 
-	// Set a default value for PostsDirectory if not specified in config
+	// Set default values if not specified in config
 	if cfg.Content.PostsDir == "" {
 		cfg.Content.PostsDir = "posts"
+	}
+	if cfg.Content.TemplatesDir == "" { // Added this block
+		cfg.Content.TemplatesDir = "templates"
 	}
 
 	return &cfg, nil
