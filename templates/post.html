@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Post.Title}} | {{.SiteTitle}}</title>
+    <meta name="description" content="{{.Post.Description}}">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/posts">All Posts</a>
+        </nav>
+    </header>
+
+    <main>
+        <article>
+            <header>
+                <h1>{{.Post.Title}}</h1>
+                <p class="post-meta">
+                    Published on <time datetime="{{.Post.Date.Format "2006-01-02"}}">{{.Post.Date.Format "January 2, 2006"}}</time>
+                    {{if .Post.Tags}}
+                    | Tags: 
+                    {{range .Post.Tags}}
+                        <a href="/tags/{{.}}" class="tag">{{.}}</a>
+                    {{end}}
+                    {{end}}
+                </p>
+            </header>
+
+            <div class="post-content">
+                {{.Content}}
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; {{.CurrentYear}} {{.SiteTitle}}. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

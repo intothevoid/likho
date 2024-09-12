@@ -1,9 +1,11 @@
 package generator
 
 import (
+	"fmt"
 	"html/template"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gomarkdown/markdown"
 	mdparser "github.com/gomarkdown/markdown/parser"
@@ -43,13 +45,25 @@ func generateHTML(cfg *config.Config, posts []post.Post) error {
 	// Parse the template
 	tmpl, err := template.ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "post.html"))
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing template: %v", err)
 	}
 
 	for _, p := range posts {
 		// Convert Markdown content to HTML
 		markdownParser := mdparser.New()
 		html := markdown.ToHTML([]byte(p.Content), markdownParser, nil)
+
+		data := struct {
+			Post        post.Post
+			Content     template.HTML
+			SiteTitle   string
+			CurrentYear int
+		}{
+			Post:        p,
+			Content:     template.HTML(html),
+			SiteTitle:   cfg.Site.Title,
+			CurrentYear: time.Now().Year(),
+		}
 
 		// Create a new file for the HTML output
 		outputPath := filepath.Join(cfg.Content.OutputDir, p.Slug+".html")
@@ -59,16 +73,9 @@ func generateHTML(cfg *config.Config, posts []post.Post) error {
 		}
 		defer file.Close()
 
-		// Execute the template with the post data and HTML content
-		err = tmpl.Execute(file, struct {
-			Post    post.Post
-			Content template.HTML
-		}{
-			Post:    p,
-			Content: template.HTML(html),
-		})
+		err = tmpl.Execute(file, data)
 		if err != nil {
-			return err
+			return fmt.Errorf("error executing template: %v", err)
 		}
 	}
 
