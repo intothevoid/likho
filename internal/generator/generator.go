@@ -13,7 +13,7 @@ import (
 )
 
 func Generate(cfg *config.Config) error {
-	posts, err := parser.ParsePosts(cfg.Content.PostsDir)
+	posts, err := parser.ParsePosts(filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir))
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func generateHTML(cfg *config.Config, posts []post.Post) error {
 	}
 
 	// Parse the template
-	tmpl, err := template.ParseFiles(filepath.Join(cfg.Content.SourceDir, "templates", "post.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "post.html"))
 	if err != nil {
 		return err
 	}
