@@ -12,6 +12,15 @@
             "program": "${workspaceFolder}/cmd/likho/main.go",
             "args": ["create", "test post"],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Likho - Generate",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/likho/main.go",
+            "args": ["generate" ],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

@@ -15,6 +15,7 @@ import (
 func CreatePost(cfg *config.Config) *cobra.Command {
 	var tags string
 	var featuredImage string
+	var description string
 
 	cmd := &cobra.Command{
 		Use:   "create [post-title]",
@@ -57,10 +58,11 @@ date: %s
 draft: true
 tags: [%s]
 featured_image: "%s"
+description: "%s"
 ---
 
 Your content here.
-`, title, date, strings.Join(tagList, ", "), featuredImage)
+`, title, date, strings.Join(tagList, ", "), featuredImage, description)
 
 			err = os.WriteFile(filename, []byte(content), 0644)
 			if err != nil {
@@ -74,6 +76,7 @@ Your content here.
 
 	cmd.Flags().StringVarP(&tags, "tags", "t", "", "Comma-separated list of tags")
 	cmd.Flags().StringVarP(&featuredImage, "image", "i", "", "URL of the featured image")
+	cmd.Flags().StringVarP(&description, "description", "d", "", "Short description of the post") // Add this line
 
 	return cmd
 }

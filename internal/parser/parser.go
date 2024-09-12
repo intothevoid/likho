@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -32,7 +32,11 @@ func ParsePosts(directory string) ([]post.Post, error) {
 }
 
 func ParsePost(filePath string) (post.Post, error) {
-	content, err := ioutil.ReadFile(filePath)
+	// Check if the file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return post.Post{}, fmt.Errorf("file does not exist: %s", filePath)
+	}
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return post.Post{}, err
 	}
