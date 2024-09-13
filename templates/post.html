@@ -8,13 +8,7 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/posts">All Posts</a>
-        </nav>
-    </header>
+    {{template "header.html" .}}
 
     <main>
         <article>
@@ -37,9 +31,7 @@
         </article>
     </main>
 
-    <footer>
-        <p>&copy; {{.CurrentYear}} {{.SiteTitle}}. All rights reserved.</p>
-    </footer>
+    {{template "footer.html" .}}
 
     <script src="/js/main.js"></script>
 </body>

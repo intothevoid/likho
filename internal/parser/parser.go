@@ -7,9 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 	"github.com/intothevoid/likho/internal/post"
 	"gopkg.in/yaml.v2"
-	// Add other necessary imports
 )
 
 func ParsePosts(directory string) ([]post.Post, error) {
@@ -70,4 +71,39 @@ func ParsePost(filePath string) (post.Post, error) {
 	}
 
 	return p, nil
+}
+
+func ParseAboutPage(filePath string) (string, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", fmt.Errorf("error reading about page: %v", err)
+	}
+
+	// Parse markdown to HTML
+	mdParser := parser.New()
+	html := markdown.ToHTML(content, mdParser, nil)
+
+	return string(html), nil
+}
+
+func ParseProjects(filePath string) (string, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", fmt.Errorf("error reading projects file: %v", err)
+	}
+
+	// Parse markdown to HTML
+	mdParser := parser.New()
+	html := markdown.ToHTML(content, mdParser, nil)
+
+	return string(html), nil
+}
+
+func extractURL(s string) string {
+	start := strings.Index(s, "(")
+	end := strings.Index(s, ")")
+	if start != -1 && end != -1 && start < end {
+		return s[start+1 : end]
+	}
+	return s
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | {{.SiteTitle}}</title>
+    <meta name="description" content="About {{.SiteTitle}}">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    {{template "header.html" .}}
+
+    <main>
+        <article>
+            <header>
+                <h1>About</h1>
+            </header>
+
+            <div class="about-content">
+                {{.Content}}
+            </div>
+        </article>
+    </main>
+
+    {{template "footer.html" .}}
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
