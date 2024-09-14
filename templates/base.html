@@ -6,23 +6,10 @@
     <title>{{ .SiteTitle }}{{ if .PageTitle }} - {{ .PageTitle }}{{ end }}</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="posts.html">All Posts</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
+    {{ template "header.html" . }}
     <main>
         {{ block "content" . }}{{ end }}
     </main>
-
-    <footer>
-        <p>&copy; {{ .CurrentYear }} {{ .SiteTitle }}</p>
-    </footer>
+    {{ template "footer.html" . }}
 </body>
 </html>

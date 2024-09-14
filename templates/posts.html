@@ -1,7 +1,5 @@
-{{ template "base.html" . }}
-
 {{ define "content" }}
-<h1>All Posts</h1>
+<h1>{{ .PageTitle }}</h1>
 <ul>
     {{ range .Posts }}
     <li>

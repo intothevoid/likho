@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -57,6 +58,7 @@ func generateHTML(cfg *config.Config, posts []post.Post, about string, projects 
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
 	}
+	log.Printf("Templates parsed: %v", tmpl.DefinedTemplates())
 
 	// Generate index page
 	if err := generateIndexHTML(cfg, tmpl, posts); err != nil {
@@ -94,14 +96,18 @@ func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
-		Content     template.HTML
+		Content     template.HTML // Add this field
 	}{
 		Posts:       posts,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   "Home",
-		Content:     "",
+		Content:     "", // Leave it empty for now
 	}
+
+	log.Printf("Generating index.html with SiteTitle: %s, PageTitle: %s", data.SiteTitle, data.PageTitle)
+	log.Printf("Number of posts: %d", len(posts))
+	log.Printf("Index data: %+v", data)
 
 	outputPath := filepath.Join(cfg.Content.OutputDir, "index.html")
 	return executeTemplate(tmpl, "index.html", outputPath, data)
@@ -206,17 +212,22 @@ func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []p
 }
 
 func executeTemplate(tmpl *template.Template, name, outputPath string, data interface{}) error {
+	log.Printf("Executing template %s for output path %s", name, outputPath)
+	log.Printf("Defined templates: %v", tmpl.DefinedTemplates())
+	log.Printf("Data being passed to template: %+v", data)
+
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("error creating file %s: %v", outputPath, err)
 	}
 	defer file.Close()
 
-	err = tmpl.ExecuteTemplate(file, name, data)
+	err = tmpl.ExecuteTemplate(file, "base.html", data)
 	if err != nil {
 		return fmt.Errorf("error executing template %s: %v", name, err)
 	}
 
+	log.Printf("Template %s executed successfully for %s", name, outputPath)
 	return nil
 }
 
