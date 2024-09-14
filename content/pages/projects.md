@@ -1,5 +1,3 @@
-# My Projects
-
 Here's a list of some projects I've worked on:
 
 ## Likho

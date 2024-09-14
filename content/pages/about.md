@@ -1,5 +1,3 @@
-# About Me
-
 Hello! I'm John Doe, a software developer with a passion for creating elegant solutions to complex problems.
 
 ## My Background
