@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -16,7 +17,28 @@ import (
 	"github.com/intothevoid/likho/internal/post"
 )
 
+// Add this new function to remove HTML files
+func removeGeneratedFiles(dir string) error {
+	return filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".html" {
+			if err := os.Remove(path); err != nil {
+				return err
+			}
+			log.Printf("Removed file: %s", path)
+		}
+		return nil
+	})
+}
+
 func Generate(cfg *config.Config) error {
+	// Remove existing HTML files from the output directory
+	if err := removeGeneratedFiles(cfg.Content.OutputDir); err != nil {
+		return fmt.Errorf("error removing existing HTML files: %v", err)
+	}
+
 	posts, err := parser.ParsePosts(filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir))
 	if err != nil {
 		return err
@@ -123,22 +145,37 @@ func generateHTML(cfg *config.Config, posts []post.Post, about string, projects 
 }
 
 func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post) error {
+	// Sort posts by date, newest first
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].Date.After(posts[j].Date)
+	})
+
+	// Get the configured number of posts (or all posts if there are fewer)
+	numPosts := len(posts)
+	if numPosts > cfg.Content.PostsPerPage {
+		numPosts = cfg.Content.PostsPerPage
+	}
+	recentPosts := posts[:numPosts]
+
 	data := struct {
 		Posts       []post.Post
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
-		Content     template.HTML // Add this field
+		Content     template.HTML
+		TotalPosts  int
 	}{
-		Posts:       posts,
+		Posts:       recentPosts,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   "Home",
-		Content:     "", // Leave it empty for now
+		Content:     "", // This will be filled by the template
+		TotalPosts:  len(posts),
 	}
 
 	log.Printf("Generating index.html with SiteTitle: %s, PageTitle: %s", data.SiteTitle, data.PageTitle)
-	log.Printf("Number of posts: %d", len(posts))
+	log.Printf("Number of recent posts: %d", len(recentPosts))
+	log.Printf("Total number of posts: %d", data.TotalPosts)
 	log.Printf("Index data: %+v", data)
 
 	outputPath := filepath.Join(cfg.Content.OutputDir, "index.html")
@@ -235,7 +272,7 @@ func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []p
 		Posts:       posts,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
-		PageTitle:   "All Posts",
+		PageTitle:   "Posts",
 		Content:     "", // Leave empty as we're not using it directly
 	}
 
