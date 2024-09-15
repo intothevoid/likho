@@ -54,7 +54,11 @@ func generateHTML(cfg *config.Config, posts []post.Post, about string, projects 
 	}
 
 	// Parse all templates with the custom functions
-	tmpl, err := template.New("").Funcs(funcMap).ParseGlob(filepath.Join(cfg.Content.TemplatesDir, "*.html"))
+	// tmpl, err := template.New("").Funcs(funcMap).ParseGlob(filepath.Join(cfg.Content.TemplatesDir, "*.html"))
+	tmpl, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "index.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
 	}
@@ -66,24 +70,52 @@ func generateHTML(cfg *config.Config, posts []post.Post, about string, projects 
 	}
 
 	// Generate post pages
+	tmplPost, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "post.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
+	if err != nil {
+		return fmt.Errorf("error parsing templates: %v", err)
+	}
 	for _, p := range posts {
-		if err := generatePostHTML(cfg, tmpl, p); err != nil {
+		if err := generatePostHTML(cfg, tmplPost, p); err != nil {
 			return err
 		}
 	}
 
 	// Generate about page
-	if err := generateAboutHTML(cfg, tmpl, about); err != nil {
+	tmplAbout, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "about.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
+	if err != nil {
+		return fmt.Errorf("error parsing templates: %v", err)
+	}
+	if err := generateAboutHTML(cfg, tmplAbout, about); err != nil {
 		return err
 	}
 
 	// Generate projects page
-	if err := generateProjectsHTML(cfg, tmpl, projects); err != nil {
+	tmplProjects, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "projects.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
+	if err != nil {
+		return fmt.Errorf("error parsing templates: %v", err)
+	}
+	if err := generateProjectsHTML(cfg, tmplProjects, projects); err != nil {
 		return err
 	}
 
 	// Generate all posts page
-	if err := generateAllPostsHTML(cfg, tmpl, posts); err != nil {
+	tmplPosts, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "posts.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
+	if err != nil {
+		return fmt.Errorf("error parsing templates: %v", err)
+	}
+	if err := generateAllPostsHTML(cfg, tmplPosts, posts); err != nil {
 		return err
 	}
 
