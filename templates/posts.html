@@ -1,11 +1,11 @@
 {{ define "content" }}
-<h2>{{ .PageTitle }}</h2>
 
 {{ if .Posts }}
+    <h2>{{ .PageTitle }}</h2>
     <ul>
     {{ range .Posts }}
         <li>
-            <h2><a href="{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a></h2>
+            <h3><a href="{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a></h3>
             <p>{{ .Description }}</p>
             <p>Published on: {{ .Date.Format "January 2, 2006" }}</p>
         </li>
