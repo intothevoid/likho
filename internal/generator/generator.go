@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
 
@@ -96,7 +95,7 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	log.Printf("Templates parsed: %v", tmpl.DefinedTemplates())
 
 	// Generate index page
-	if err := generateIndexHTML(cfg, tmpl, posts); err != nil {
+	if err := generateIndexHTML(cfg, tmpl, posts, pages); err != nil {
 		return err
 	}
 
@@ -104,12 +103,13 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	tmplPost, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "post.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "pages.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
 	}
 	for _, p := range posts {
-		if err := generatePostHTML(cfg, tmplPost, p); err != nil {
+		if err := generatePostHTML(cfg, tmplPost, p, pages); err != nil {
 			return err
 		}
 	}
@@ -139,49 +139,39 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
 	}
-	if err := generateAllPostsHTML(cfg, tmplPosts, posts); err != nil {
+	if err := generateAllPostsHTML(cfg, tmplPosts, posts, pages); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post) error {
-	// Sort posts by date, newest first
-	sort.Slice(posts, func(i, j int) bool {
-		return posts[i].Date.After(posts[j].Date)
-	})
-
-	// Get the configured number of posts (or all posts if there are fewer)
-	numPosts := len(posts)
-	if numPosts > cfg.Content.PostsPerPage {
-		numPosts = cfg.Content.PostsPerPage
-	}
-	recentPosts := posts[:numPosts]
-
+func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post, pages []parser.Page) error {
 	data := struct {
 		Posts       []post.Post
+		Pages       []parser.Page
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
-		Content     template.HTML
 		TotalPosts  int
 	}{
-		Posts:       recentPosts,
+		Posts:       posts[:min(len(posts), cfg.Content.PostsPerPage)],
+		Pages:       pages,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   "Home",
-		Content:     "", // This will be filled by the template
 		TotalPosts:  len(posts),
 	}
 
-	log.Printf("Generating index.html with SiteTitle: %s, PageTitle: %s", data.SiteTitle, data.PageTitle)
-	log.Printf("Number of recent posts: %d", len(recentPosts))
-	log.Printf("Total number of posts: %d", data.TotalPosts)
-	log.Printf("Index data: %+v", data)
-
 	outputPath := filepath.Join(cfg.Content.OutputDir, "index.html")
 	return executeTemplate(tmpl, "index.html", outputPath, data)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 // urlize converts a string to a URL-friendly format
@@ -200,7 +190,7 @@ func urlize(s string) string {
 	return s
 }
 
-func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post) error {
+func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, pages []parser.Page) error {
 	// Convert Markdown content to HTML
 	markdownParser := mdparser.New()
 	html := markdown.ToHTML([]byte(p.Content), markdownParser, nil)
@@ -211,12 +201,14 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post) 
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
+		Pages       []parser.Page
 	}{
 		Post:        p,
 		Content:     template.HTML(html),
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   p.Title,
+		Pages:       pages,
 	}
 
 	// Create the file name using both the title and the slug
@@ -246,19 +238,21 @@ func generatePageHTML(cfg *config.Config, tmpl *template.Template, page parser.P
 	return executeTemplate(tmpl, "pages.html", outputPath, data)
 }
 
-func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post) error {
+func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post, pages []parser.Page) error {
 	data := struct {
 		Posts       []post.Post
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
 		Content     template.HTML
+		Pages       []parser.Page
 	}{
 		Posts:       posts,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   "Posts",
 		Content:     "", // Leave empty as we're not using it directly
+		Pages:       pages,
 	}
 
 	outputPath := filepath.Join(cfg.Content.OutputDir, "posts.html")
