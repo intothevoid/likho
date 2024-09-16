@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -63,6 +64,10 @@ func Generate(cfg *config.Config) error {
 	}
 
 	if err := generateRSS(cfg, posts); err != nil {
+		return err
+	}
+
+	if err := copyCSSFile(cfg); err != nil {
 		return err
 	}
 
@@ -307,5 +312,30 @@ func generateSitemap(cfg *config.Config, posts []post.Post) error {
 
 func generateRSS(cfg *config.Config, posts []post.Post) error {
 	// Implement RSS feed generation logic
+	return nil
+}
+
+func copyCSSFile(cfg *config.Config) error {
+	sourcePath := filepath.Join(cfg.Content.SourceDir, "assets", "main.css")
+	destPath := filepath.Join(cfg.Content.OutputDir, "main.css")
+
+	source, err := os.Open(sourcePath)
+	if err != nil {
+		return fmt.Errorf("error opening source CSS file: %v", err)
+	}
+	defer source.Close()
+
+	destination, err := os.Create(destPath)
+	if err != nil {
+		return fmt.Errorf("error creating destination CSS file: %v", err)
+	}
+	defer destination.Close()
+
+	_, err = io.Copy(destination, source)
+	if err != nil {
+		return fmt.Errorf("error copying CSS file: %v", err)
+	}
+
+	log.Printf("CSS file copied to: %s", destPath)
 	return nil
 }
