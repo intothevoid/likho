@@ -9,15 +9,11 @@
                 <date>{{ .Date.Format "2006-01-02" }}</date>
                 <div>
                     <h2>{{ .Title }}</h2>
-                    <p>{{ .Description }}</p>
                 </div>
             </a>
         </li>
     {{ end }}
     </ul>
-    {{ if lt (len .Posts) .TotalPosts }}
-        <p><a href="posts.html">View all {{ .TotalPosts }} posts</a></p>
-    {{ end }}
 {{ else }}
     <p>No posts available.</p>
 {{ end }}

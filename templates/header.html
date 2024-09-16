@@ -1,0 +1,19 @@
+{{ define "header" }}
+<header>
+    <div id="site-title" style="display:flex; justify-content:left; align-items: left;">
+        <a href="index.html">
+            <h1 style="margin: 0;">{{ .SiteTitle }}</h1>
+        </a>
+    </div>
+    <div id="nav-links" style="display:flex; justify-content:right; align-items: right;">
+        <nav>
+            <div style="display: flex;">
+                <a href="posts.html">All Posts</a>
+                {{ range .Pages }}
+                    <a href="{{ .Slug }}.html">{{ .Title }}</a>
+                {{ end }}
+            </div>
+        </nav>
+    </div>
+</header>
+{{ end }}

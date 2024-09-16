@@ -16,6 +16,7 @@ content:
   posts_dir: "posts"
   output_dir: "public"
   templates_dir: "templates"  
+  pages_dir: "pages"
   posts_per_page: 10
 
 # Theme Settings
