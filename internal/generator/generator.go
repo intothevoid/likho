@@ -159,7 +159,7 @@ func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post
 		Pages:       pages,
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
-		PageTitle:   "Home",
+		PageTitle:   "Latest",
 		TotalPosts:  len(posts),
 	}
 
