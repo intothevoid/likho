@@ -1,5 +1,8 @@
 {{ define "footer" }}
 <footer>
-    <p style="display: flex; justify-content: center;" class="subtitle">{{.CurrentYear}} {{.SiteTitle}}. Powered by <a href="https://www.github.com/intothevoid/likho">Likho.</a></p>
+    <p class="footer-content">
+        <span>&copy; {{.CurrentYear}} {{.SiteTitle}}.</span>
+        <span>Powered by <a href="https://www.github.com/intothevoid/likho">Likho</a>.</span>
+    </p>
 </footer>
 {{ end }}
