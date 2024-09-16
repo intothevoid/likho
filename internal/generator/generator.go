@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"os/exec"
+
 	"github.com/gomarkdown/markdown"
 	mdparser "github.com/gomarkdown/markdown/parser"
 	"github.com/intothevoid/likho/internal/config"
@@ -67,8 +69,12 @@ func Generate(cfg *config.Config) error {
 		return err
 	}
 
-	if err := copyCSSFile(cfg); err != nil {
-		return err
+	// After all HTML files are generated, run the Tailwind CSS generation
+	cmd := exec.Command("./scripts/generate_tailwind_css.sh")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("error generating Tailwind CSS: %v", err)
 	}
 
 	return nil

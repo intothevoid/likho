@@ -30,3 +30,6 @@ likho-test/
 # generated html
 public/*
 .DS_Store
+
+# node modules
+node_modules
