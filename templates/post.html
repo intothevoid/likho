@@ -1,5 +1,9 @@
 {{ define "content" }}
-<h2>{{ .Post.Title }}</h2>
-<p>{{ .Post.Date.Format "2006-01-02" }}</p>
-{{ .Content }}
+<article>
+    <h2 class="text-3xl font-bold mb-2">{{ .Post.Title }}</h2>
+    <p class="text-sm text-gray-500 mb-6">{{ .Post.Date.Format "January 2, 2006" }}</p>
+    <div class="prose max-w-none">
+        {{ .Content }}
+    </div>
+</article>
 {{ end }}

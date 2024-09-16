@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .SiteTitle }}{{ if .PageTitle }} - {{ .PageTitle }}{{ end }}</title>
-    <link rel="stylesheet" href="main.css">
+    <title>{{.SiteTitle}} - {{.PageTitle}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    {{ template "header.html" . }}
-    <main>
-        {{ block "content" . }}{{ end }}
-    </main>
-    {{ template "footer.html" . }}
+<body class="bg-gray-100 text-gray-800 font-sans leading-normal">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {{ template "header.html" . }}
+        <main class="mt-8">
+            {{ block "content" . }}{{ end }}
+        </main>
+        {{ template "footer.html" . }}
+    </div>
 </body>
 </html>

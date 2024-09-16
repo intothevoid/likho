@@ -1,4 +1,6 @@
 {{ define "content" }}
-<h2>{{ .PageTitle }}</h2>
-{{ .Content }}
+<h2 class="text-3xl font-bold mb-6">{{ .PageTitle }}</h2>
+<div class="prose max-w-none">
+    {{ .Content }}
+</div>
 {{ end }}

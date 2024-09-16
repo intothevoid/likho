@@ -1,17 +1,17 @@
 {{ define "content" }}
 
 {{ if .Posts }}
-    <h2>{{ .PageTitle }}</h2>
-    <ul>
+    <h2 class="text-3xl font-bold mb-6">{{ .PageTitle }}</h2>
+    <ul class="space-y-8">
     {{ range .Posts }}
-        <li>
-            <h3><a href="{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a></h3>
-            <p>{{ .Description }}</p>
-            <p>Published on: {{ .Date.Format "January 2, 2006" }}</p>
+        <li class="border-b border-gray-200 pb-6">
+            <h3 class="text-2xl font-semibold mb-2"><a href="{{ .Title | urlize }}-{{ .Slug }}.html" class="text-blue-600 hover:text-blue-800">{{ .Title }}</a></h3>
+            <p class="text-gray-600 mb-2">{{ .Description }}</p>
+            <p class="text-sm text-gray-500">Published on: {{ .Date.Format "January 2, 2006" }}</p>
         </li>
     {{ end }}
     </ul>
 {{ else }}
-    <p>No posts available.</p>
+    <p class="text-gray-600">No posts available.</p>
 {{ end }}
 {{ end }}
