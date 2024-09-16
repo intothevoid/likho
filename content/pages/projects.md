@@ -1,3 +1,10 @@
+---
+title: "Projects"
+date: 2024-09-16
+featured_image: "test_url"
+description: "A list of projects I have worked on"
+---
+
 Here's a list of some projects I've worked on:
 
 ## Likho

@@ -54,17 +54,12 @@ func Generate(cfg *config.Config) error {
 		return err
 	}
 
-	about, err := parser.ParseAboutPage(filepath.Join(cfg.Content.SourceDir, cfg.Content.PagesDir, "about.md"))
+	pages, err := parser.ParsePages(filepath.Join(cfg.Content.SourceDir, cfg.Content.PagesDir))
 	if err != nil {
 		return err
 	}
 
-	projects, err := parser.ParseProjects(filepath.Join(cfg.Content.SourceDir, cfg.Content.PagesDir, "projects.md"))
-	if err != nil {
-		return err
-	}
-
-	if err := generateHTML(cfg, posts, about, projects); err != nil {
+	if err := generateHTML(cfg, posts, pages); err != nil {
 		return err
 	}
 
@@ -83,7 +78,7 @@ func Generate(cfg *config.Config) error {
 	return nil
 }
 
-func generateHTML(cfg *config.Config, posts []post.Post, about string, projects string) error {
+func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) error {
 	// Create a FuncMap with custom functions
 	funcMap := template.FuncMap{
 		"urlize": urlize,
@@ -119,28 +114,21 @@ func generateHTML(cfg *config.Config, posts []post.Post, about string, projects 
 		}
 	}
 
-	// Generate about page
-	tmplAbout, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
-		filepath.Join(cfg.Content.TemplatesDir, "about.html"),
+	// Generate pages
+	tmpPages, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "pages.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
-	}
-	if err := generateAboutHTML(cfg, tmplAbout, about); err != nil {
-		return err
 	}
 
-	// Generate projects page
-	tmplProjects, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
-		filepath.Join(cfg.Content.TemplatesDir, "projects.html"),
-		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
-		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
-	if err != nil {
-		return fmt.Errorf("error parsing templates: %v", err)
-	}
-	if err := generateProjectsHTML(cfg, tmplProjects, projects); err != nil {
-		return err
+	// Generate html for all pages
+	for _, page := range pages {
+		if err := generatePageHTML(cfg, tmpPages, page, pages); err != nil {
+			log.Printf("Error generating page %s. Error: %v", page.Title, err)
+			return err
+		}
 	}
 
 	// Generate all posts page
@@ -239,40 +227,23 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post) 
 	return executeTemplate(tmpl, "post.html", outputPath, data)
 }
 
-func generateAboutHTML(cfg *config.Config, tmpl *template.Template, aboutContent string) error {
+func generatePageHTML(cfg *config.Config, tmpl *template.Template, page parser.Page, pages []parser.Page) error {
 	data := struct {
 		Content     template.HTML
 		SiteTitle   string
 		CurrentYear int
 		PageTitle   string
+		Pages       []parser.Page
 	}{
-		Content:     template.HTML(aboutContent),
+		Content:     template.HTML(page.Content),
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
-		PageTitle:   "About",
+		PageTitle:   page.Title,
+		Pages:       pages,
 	}
 
-	outputPath := filepath.Join(cfg.Content.OutputDir, "about.html")
-	return executeTemplate(tmpl, "about.html", outputPath, data)
-}
-
-func generateProjectsHTML(cfg *config.Config, tmpl *template.Template, projectsContent string) error {
-	data := struct {
-		Posts       []post.Post
-		Content     template.HTML
-		SiteTitle   string
-		CurrentYear int
-		PageTitle   string
-	}{
-		Posts:       nil,
-		Content:     template.HTML(projectsContent),
-		SiteTitle:   cfg.Site.Title,
-		CurrentYear: time.Now().Year(),
-		PageTitle:   "Projects",
-	}
-
-	outputPath := filepath.Join(cfg.Content.OutputDir, "projects.html")
-	return executeTemplate(tmpl, "projects.html", outputPath, data)
+	outputPath := filepath.Join(cfg.Content.OutputDir, page.Slug+".html")
+	return executeTemplate(tmpl, "pages.html", outputPath, data)
 }
 
 func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post) error {

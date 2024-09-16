@@ -1,3 +1,10 @@
+---
+title: "About"
+date: 2024-09-16
+featured_image: "test_url"
+description: "A page which talks a little about myself"
+---
+
 Hello! I'm John Doe, a software developer with a passion for creating elegant solutions to complex problems.
 
 ## My Background
