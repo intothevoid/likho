@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    {{ template "header.html" . }}
+    {{ template "header" . }}
     <main>
         {{ block "content" . }}{{ end }}
     </main>
-    {{ template "footer.html" . }}
+    {{ template "footer" . }}
 </body>
 </html>

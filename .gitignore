@@ -28,5 +28,5 @@ go.work.sum
 likho-test/
 
 # generated html
-public/*
+public/**/*
 .DS_Store

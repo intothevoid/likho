@@ -37,7 +37,16 @@ func removeGeneratedFiles(dir string) error {
 func Generate(cfg *config.Config) error {
 	// Remove existing HTML files from the output directory
 	if err := removeGeneratedFiles(cfg.Content.OutputDir); err != nil {
-		return fmt.Errorf("error removing existing HTML files: %v", err)
+		if os.IsNotExist(err) {
+			// Create the output directory if it doesn't exist
+			if err := os.MkdirAll(cfg.Content.OutputDir, 0755); err != nil {
+				log.Printf("error creating output directory: %v", err)
+				return fmt.Errorf("error creating output directory: %v", err)
+			}
+		} else {
+			log.Printf("error removing existing HTML files: %v", err)
+			return fmt.Errorf("error removing existing HTML files: %v", err)
+		}
 	}
 
 	posts, err := parser.ParsePosts(filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir))
