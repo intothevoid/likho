@@ -1,6 +1,10 @@
-# likho
+# Likho
 
-Likho is a lightweight, fast, and simple static site generator written in Go. It's designed to convert markdown files into a fully functional static website with minimal configuration.
+<a href="content/assets/logo.jpg"><img src="content/assets/logo.jpg" height="300px" alt="Likho Logo"></a>
+
+Likho is a lightweight, fast, and simple static site generator written in Go. 
+
+It's designed to convert markdown files into a fully functional static website with minimal configuration.
 
 ## Features
 

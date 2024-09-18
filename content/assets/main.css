@@ -1,3 +1,8 @@
+/* 
+The original idea for this was taken from https://niklasfasching.de/posts/just-enough-css/
+Over time, this has evolved to suit Likho's needs (https://www.github.com/intothevoid/likho)
+*/
+
 * {
   box-sizing: border-box;
   margin: 0;
