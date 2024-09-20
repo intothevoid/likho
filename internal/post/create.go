@@ -12,47 +12,58 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func CreatePost(cfg *config.Config) *cobra.Command {
+func CreatePostCmd(cfg *config.Config) *cobra.Command {
 	var tags string
 	var featuredImage string
 	var description string
 
 	cmd := &cobra.Command{
-		Use:   "create [post-title]",
+		Use:   "post [post-title]",
 		Short: "Create a new post",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			title := args[0]
 			slug := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 			date := time.Now().Format("2006-01-02")
+			createPost(cfg, title, date, slug, tags, featuredImage, description)
+		},
+	}
 
-			// Create posts directory if it doesn't exist
-			// Create folder structure at root
-			postsDir := filepath.Join("../..", cfg.Content.SourceDir, cfg.Content.PostsDir, date)
-			if err := os.MkdirAll(postsDir, os.ModePerm); err != nil {
-				log.Fatalf("Failed to create posts directory: %v", err)
-			}
+	cmd.Flags().StringVarP(&tags, "tags", "t", "", "Comma-separated list of tags")
+	cmd.Flags().StringVarP(&featuredImage, "image", "i", "", "URL of the featured image")
+	cmd.Flags().StringVarP(&description, "description", "d", "", "Short description of the post") // Add this line
 
-			// Generate the filename
-			filename := filepath.Join(postsDir, slug+".md")
+	return cmd
+}
 
-			// Create the file
-			file, err := os.Create(filename)
-			if err != nil {
-				log.Fatalf("Failed to create file: %v", err)
-			}
-			defer file.Close()
+func createPost(cfg *config.Config, title string, date string, slug string, tags string, featuredImage string, description string) {
+	// Create posts directory if it doesn't exist
+	// Create folder structure at root
+	postsDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir, date)
+	if err := os.MkdirAll(postsDir, os.ModePerm); err != nil {
+		log.Fatalf("Failed to create posts directory: %v", err)
+	}
 
-			// Process tags
-			tagList := []string{}
-			if tags != "" {
-				tagList = strings.Split(tags, ",")
-				for i, tag := range tagList {
-					tagList[i] = strings.TrimSpace(tag)
-				}
-			}
+	// Generate the filename
+	filename := filepath.Join(postsDir, slug+".md")
 
-			content := fmt.Sprintf(`---
+	// Create the file
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatalf("Failed to create file: %v", err)
+	}
+	defer file.Close()
+
+	// Process tags
+	tagList := []string{}
+	if tags != "" {
+		tagList = strings.Split(tags, ",")
+		for i, tag := range tagList {
+			tagList[i] = strings.TrimSpace(tag)
+		}
+	}
+
+	content := fmt.Sprintf(`---
 title: "%s"
 date: %s
 draft: true
@@ -64,19 +75,11 @@ description: "%s"
 Your content here.
 `, title, date, strings.Join(tagList, ", "), featuredImage, description)
 
-			err = os.WriteFile(filename, []byte(content), 0644)
-			if err != nil {
-				fmt.Printf("Error writing file: %v\n", err)
-				return
-			}
-
-			fmt.Printf("Created new post: %s\n", filename)
-		},
+	err = os.WriteFile(filename, []byte(content), 0644)
+	if err != nil {
+		fmt.Printf("Error writing file: %v\n", err)
+		return
 	}
 
-	cmd.Flags().StringVarP(&tags, "tags", "t", "", "Comma-separated list of tags")
-	cmd.Flags().StringVarP(&featuredImage, "image", "i", "", "URL of the featured image")
-	cmd.Flags().StringVarP(&description, "description", "d", "", "Short description of the post") // Add this line
-
-	return cmd
+	fmt.Printf("Created new post: %s\n", filename)
 }

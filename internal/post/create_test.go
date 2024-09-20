@@ -83,7 +83,7 @@ func TestCreatePost(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cmd := CreatePost(cfg)
+			cmd := CreatePostCmd(cfg)
 			cmd.SetArgs(tt.args)
 
 			for flagName, flagValue := range tt.flags {

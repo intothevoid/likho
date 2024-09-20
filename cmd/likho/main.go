@@ -7,6 +7,7 @@ import (
 
 	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/generator"
+	"github.com/intothevoid/likho/internal/page"
 	"github.com/intothevoid/likho/internal/post"
 	"github.com/intothevoid/likho/internal/server"
 	"github.com/spf13/cobra"
@@ -52,7 +53,15 @@ func main() {
 }
 
 func createCmd(cfg *config.Config) *cobra.Command {
-	return post.CreatePost(cfg)
+	createCmd := &cobra.Command{
+		Use:   "create",
+		Short: "Create a new post or page",
+	}
+
+	createCmd.AddCommand(post.CreatePostCmd(cfg))
+	createCmd.AddCommand(page.CreatePageCmd(cfg))
+
+	return createCmd
 }
 
 func generateCmd(cfg *config.Config) *cobra.Command {
