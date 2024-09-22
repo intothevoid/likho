@@ -1,14 +1,22 @@
-# likho
+# Likho
 
-Likho is a lightweight, fast, and simple static site generator written in Go. It's designed to convert markdown files into a fully functional static website with minimal configuration.
+<a href="content/assets/logo.jpg"><img src="content/assets/logo.jpg" height="300px" alt="Likho Logo"></a>
+
+[![Go Build Status](https://github.com/intothevoid/likho/workflows/Go/badge.svg)](https://github.com/intothevoid/likho/actions)
+[![Go Test Status](https://github.com/intothevoid/likho/workflows/Tests/badge.svg)](https://github.com/intothevoid/likho/actions)
+
+Likho is a lightweight, fast, and simple static site generator written in Go. 
+
+It's designed to convert markdown files into a fully functional static website with minimal configuration.
 
 ## Features
 
 - Markdown to HTML conversion
 - YAML-based configuration
-- Custom metadata for each post
+- Custom metadata for each post and page
 - Automatic sitemap and RSS feed generation
 - Command-line interface for easy management
+- Support for creating both posts and pages
 
 ## Installation
 
@@ -31,34 +39,65 @@ Likho is a lightweight, fast, and simple static site generator written in Go. It
 
 Likho provides several commands to manage your static site:
 
-1. Create a new post:
-   ```
-   ./likho create "My New Post" [flags]
-   ```
-   
-   Available flags:
-   - `-t, --tags string`: Comma-separated list of tags for the post
-   - `-i, --image string`: URL of the featured image for the post
+### Create a new post
 
-   Example:
-   ```
-   ./likho create "My New Post" -t "technology,golang" -i "https://example.com/image.jpg"
-   ```
+```
+./likho create post "My New Post" [flags]
+```
 
-2. Generate the static site:
-   ```
-   ./likho generate
-   ```
+Available flags:
+- `-t, --tags string`: Comma-separated list of tags for the post
+- `-i, --image string`: URL of the featured image for the post
+- `-d, --description string`: Short description of the post
 
-3. Serve the generated site locally:
-   ```
-   ./likho serve
-   ```
+Example:
+```
+./likho create post "My New Post" -t "technology,golang" -i "https://example.com/image.jpg"
+```
 
-4. Display help information:
-   ```
-   ./likho help
-   ```
+### Create a new page
+
+```
+./likho create page "Page Title" [flags]
+```
+
+Available flags:
+- `-i, --image string`: URL of the featured image for the page
+- `-d, --description string`: Short description of the page
+
+Example:
+```
+./likho create page "About Me" -i "https://example.com/about.jpg" -d "Learn more about the author"
+```
+
+### Generate the static site
+
+```
+./likho generate
+```
+
+This command will:
+1. Parse all posts and pages
+2. Generate HTML files for each post and page
+3. Create an index page with recent posts
+4. Generate a sitemap and RSS feed
+5. Copy the CSS file to the output directory
+
+### Serve the generated site locally
+
+```
+./likho serve
+```
+
+This command starts a local web server to preview your generated site.
+
+### Display help information
+
+```
+./likho help
+```
+
+Use this command to see all available commands and their descriptions.
 
 ## Configuration
 
@@ -105,3 +144,37 @@ static:
   - `dir`: The directory containing static assets (CSS, images, etc.)
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
+
+## Directory Structure
+
+After setting up your Likho project, your directory structure should look like this:
+
+```
+my-likho-site/
+├── config.yaml
+├── content/
+│   ├── posts/
+│   │   └── YYYY-MM-DD/
+│   │       └── post-slug.md
+│   ├── pages/
+│   │   └── page-slug.md
+│   └── assets/
+│       └── main.css
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── post.html
+│   ├── pages.html
+│   ├── header.html
+│   └── footer.html
+└── public/
+    └── (generated files)
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
