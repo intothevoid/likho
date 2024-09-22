@@ -1,4 +1,4 @@
-# This workflow will build a golang project
+# This workflow will build a golang project and run tests
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
 name: Go
@@ -26,3 +26,9 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: Update badges
+      if: success()
+      run: |
+        sed -i 's/workflows\/Go\/badge\.svg/workflows\/Go\/badge.svg?branch=main\&event=push/g' README.md
+        sed -i 's/workflows\/Tests\/badge\.svg/workflows\/Go\/badge.svg?branch=main\&event=push/g' README.md
