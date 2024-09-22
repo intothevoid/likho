@@ -23,7 +23,7 @@ func TestCreatePost(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
-	defer os.RemoveAll(filepath.Join("../..", tempDir))
+	defer os.RemoveAll(tempDir)
 
 	// Create a test config
 	cfg := &config.Config{
@@ -115,33 +115,19 @@ func TestCreatePost(t *testing.T) {
 			// Check if the file was created
 			expectedSlug := strings.ToLower(strings.ReplaceAll(tt.expectedTitle, " ", "-"))
 			currentDate := time.Now().Format("2006-01-02")
-			expectedDir := filepath.Join("../..", tempDir, cfg.Content.PostsDir, currentDate)
+			expectedDir := filepath.Join(tempDir, cfg.Content.PostsDir, currentDate)
 			expectedFilePath := filepath.Join(expectedDir, expectedSlug+".md")
+
+			// Ensure the directory exists
+			err = os.MkdirAll(expectedDir, os.ModePerm)
+			if err != nil {
+				t.Fatalf("Failed to create directory: %v", err)
+			}
 
 			// Wait for a short time to ensure file creation is complete
 			time.Sleep(100 * time.Millisecond)
 
-			// Print the expected file path
-			t.Logf("Expected file path: %s", expectedFilePath)
-
-			// Check if the directory exists
-			if _, err := os.Stat(expectedDir); os.IsNotExist(err) {
-				t.Fatalf("Expected directory does not exist: %s", expectedDir)
-			}
-
-			// List files in the directory
-			files, err := os.ReadDir(expectedDir)
-			if err != nil {
-				t.Fatalf("Failed to read directory: %v", err)
-			}
-
-			// Print out all files in the directory
-			t.Logf("Files in directory %s:", expectedDir)
-			for _, file := range files {
-				t.Logf("- %s", file.Name())
-			}
-
-			// Check if the expected file exists
+			// Check if the file exists
 			if _, err := os.Stat(expectedFilePath); os.IsNotExist(err) {
 				t.Fatalf("Expected file does not exist: %s", expectedFilePath)
 			}
