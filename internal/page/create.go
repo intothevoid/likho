@@ -20,7 +20,11 @@ func CreatePageCmd(cfg *config.Config) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			title := args[0]
-			createPage(cfg, title, image, description)
+			err := createPage(cfg, title, image, description)
+			if err != nil {
+				fmt.Printf("Error creating page: %v\n", err)
+				return
+			}
 		},
 	}
 
@@ -30,7 +34,7 @@ func CreatePageCmd(cfg *config.Config) *cobra.Command {
 	return cmd
 }
 
-func createPage(cfg *config.Config, title, image, description string) {
+func createPage(cfg *config.Config, title, image, description string) error {
 	slug := strings.ReplaceAll(strings.ToLower(title), " ", "-")
 	fileName := fmt.Sprintf("%s.md", slug)
 	filePath := filepath.Join(cfg.Content.SourceDir, cfg.Content.PagesDir, fileName)
@@ -48,8 +52,9 @@ Write your page content here.
 	err := os.WriteFile(filePath, []byte(content), 0644)
 	if err != nil {
 		fmt.Printf("Error creating page: %v\n", err)
-		return
+		return err
 	}
 
 	fmt.Printf("Page created successfully: %s\n", filePath)
+	return nil
 }

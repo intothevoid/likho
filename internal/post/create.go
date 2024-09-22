@@ -21,11 +21,15 @@ func CreatePostCmd(cfg *config.Config) *cobra.Command {
 		Use:   "post [post-title]",
 		Short: "Create a new post",
 		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 1 {
+				return fmt.Errorf("accepts 1 arg(s), received %d", len(args))
+			}
 			title := args[0]
 			slug := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 			date := time.Now().Format("2006-01-02")
 			createPost(cfg, title, date, slug, tags, featuredImage, description)
+			return nil
 		},
 	}
 
