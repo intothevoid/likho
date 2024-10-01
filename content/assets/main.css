@@ -48,6 +48,12 @@ p code {
   border: 1px solid #ccc;
 }
 
+.info {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5em 0;
+}
+
 ol, ul {
   margin: 1em;
 }
