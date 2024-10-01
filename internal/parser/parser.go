@@ -10,7 +10,9 @@ import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/intothevoid/likho/internal/post"
-	"gopkg.in/yaml.v2"
+	"github.com/intothevoid/likho/pkg/utils"
+	"go.uber.org/zap"
+	"gopkg.in/yaml.v1"
 )
 
 func ParsePosts(directory string) ([]post.Post, error) {
@@ -35,6 +37,7 @@ func ParsePosts(directory string) ([]post.Post, error) {
 func ParsePost(filePath string) (post.Post, error) {
 	// Check if the file exists
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		utils.GetLogger().Error("file does not exist", zap.String("filePath", filePath))
 		return post.Post{}, fmt.Errorf("file does not exist: %s", filePath)
 	}
 	content, err := os.ReadFile(filePath)

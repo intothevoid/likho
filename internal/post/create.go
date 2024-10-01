@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/pkg/utils"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 func CreatePostCmd(cfg *config.Config) *cobra.Command {
@@ -81,9 +83,9 @@ Your content here.
 
 	err = os.WriteFile(filename, []byte(content), 0644)
 	if err != nil {
-		fmt.Printf("Error writing file: %v\n", err)
+		utils.GetLogger().Error("error writing file", zap.Error(err))
 		return
 	}
 
-	fmt.Printf("Created new post: %s\n", filename)
+	utils.GetLogger().Info("created new post", zap.String("filename", filename))
 }

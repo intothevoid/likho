@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,6 +14,8 @@ import (
 	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/parser"
 	"github.com/intothevoid/likho/internal/post"
+	"github.com/intothevoid/likho/pkg/utils"
+	"go.uber.org/zap"
 )
 
 // Add this new function to remove HTML files
@@ -27,23 +28,25 @@ func removeGeneratedFiles(dir string) error {
 			if err := os.Remove(path); err != nil {
 				return err
 			}
-			log.Printf("Removed file: %s", path)
+			utils.GetLogger().Info("removed file", zap.String("path", path))
 		}
 		return nil
 	})
 }
 
 func Generate(cfg *config.Config) error {
+	logger := utils.GetLogger()
+
 	// Remove existing HTML files from the output directory
 	if err := removeGeneratedFiles(cfg.Content.OutputDir); err != nil {
 		if os.IsNotExist(err) {
 			// Create the output directory if it doesn't exist
 			if err := os.MkdirAll(cfg.Content.OutputDir, 0755); err != nil {
-				log.Printf("error creating output directory: %v", err)
+				logger.Error("error creating output directory", zap.Error(err))
 				return fmt.Errorf("error creating output directory: %v", err)
 			}
 		} else {
-			log.Printf("error removing existing HTML files: %v", err)
+			logger.Error("error removing existing HTML files", zap.Error(err))
 			return fmt.Errorf("error removing existing HTML files: %v", err)
 		}
 	}
@@ -92,7 +95,7 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
 	}
-	log.Printf("Templates parsed: %v", tmpl.DefinedTemplates())
+	utils.GetLogger().Debug("templates parsed", zap.Int("numTemplates", len(tmpl.DefinedTemplates())))
 
 	// Generate index page
 	if err := generateIndexHTML(cfg, tmpl, posts, pages); err != nil {
@@ -126,7 +129,7 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	// Generate html for all pages
 	for _, page := range pages {
 		if err := generatePageHTML(cfg, tmpPages, page, pages); err != nil {
-			log.Printf("Error generating page %s. Error: %v", page.Title, err)
+			utils.GetLogger().Error("error generating page", zap.String("title", page.Title), zap.Error(err))
 			return err
 		}
 	}
@@ -260,9 +263,12 @@ func generateAllPostsHTML(cfg *config.Config, tmpl *template.Template, posts []p
 }
 
 func executeTemplate(tmpl *template.Template, name, outputPath string, data interface{}) error {
-	log.Printf("Executing template %s for output path %s", name, outputPath)
-	log.Printf("Defined templates: %v", tmpl.DefinedTemplates())
-	log.Printf("Data being passed to template: %+v", data)
+	logger := utils.GetLogger()
+
+	logger.Debug("executing template",
+		zap.String("name", name),
+		zap.String("outputPath", outputPath),
+		zap.Any("data", data))
 
 	file, err := os.Create(outputPath)
 	if err != nil {
@@ -275,7 +281,9 @@ func executeTemplate(tmpl *template.Template, name, outputPath string, data inte
 		return fmt.Errorf("error executing template %s: %v", name, err)
 	}
 
-	log.Printf("Template %s executed successfully for %s", name, outputPath)
+	logger.Debug("template executed successfully",
+		zap.String("name", name),
+		zap.String("outputPath", outputPath))
 	return nil
 }
 
@@ -310,6 +318,6 @@ func copyCSSFile(cfg *config.Config) error {
 		return fmt.Errorf("error copying CSS file: %v", err)
 	}
 
-	log.Printf("CSS file copied to: %s", destPath)
+	utils.GetLogger().Info("css file copied to", zap.String("path", destPath))
 	return nil
 }
