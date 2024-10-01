@@ -2,8 +2,10 @@
 
 <a href="content/assets/logo.jpg"><img src="content/assets/logo.jpg" height="300px" alt="Likho Logo"></a>
 
-[![Go Build Status](https://github.com/intothevoid/likho/workflows/Go/badge.svg)](https://github.com/intothevoid/likho/actions)
-[![Go Test Status](https://github.com/intothevoid/likho/workflows/Tests/badge.svg)](https://github.com/intothevoid/likho/actions)
+[![Go](https://github.com/intothevoid/likho/actions/workflows/go.yml/badge.svg)](https://github.com/intothevoid/likho/actions/workflows/go.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/intothevoid/likho)](https://goreportcard.com/report/github.com/intothevoid/likho)
+[![Release](https://img.shields.io/github/release/intothevoid/likho.svg)](https://github.com/intothevoid/likho/releases/latest)
+[![License](https://img.shields.io/github/license/intothevoid/likho.svg)](https://github.com/intothevoid/likho/blob/main/LICENSE)
 
 Likho is a lightweight, fast, and simple static site generator written in Go. 
 

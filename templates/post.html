@@ -1,5 +1,13 @@
 {{ define "content" }}
 <h2>{{ .Post.Title }}</h2>
 <p>{{ .Post.Date.Format "2006-01-02" }}</p>
+{{ if .Post.Tags }}
+<p>Tags: 
+    {{ range $index, $tag := .Post.Tags }}
+        {{ if $index }}, {{ end }}
+        <a href="/tags/{{ $tag | urlize }}.html">{{ $tag }}</a>
+    {{ end }}
+</p>
+{{ end }}
 {{ .Content }}
 {{ end }}

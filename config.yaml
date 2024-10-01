@@ -1,5 +1,9 @@
 # Likho Configuration File
 
+# Logging Settings
+logging:
+  level: "info"  # Possible values: debug, info, warn, error
+
 # Site Information
 site:
   title: "My Awesome Blog"
@@ -50,3 +54,4 @@ features:
 custom:
   google_analytics: "UA-XXXXXXXXX-X"
   disqus_shortname: "your-disqus-shortname"
+

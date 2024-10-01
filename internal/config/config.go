@@ -46,6 +46,9 @@ type Config struct {
 		GoogleAnalytics string `mapstructure:"google_analytics"`
 		DisqusShortname string `mapstructure:"disqus_shortname"`
 	} `mapstructure:"custom"`
+	Logging struct {
+		Level string `yaml:"level"`
+	} `yaml:"logging"`
 }
 
 func Load() (*Config, error) {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -10,8 +9,10 @@ import (
 	"github.com/intothevoid/likho/internal/page"
 	"github.com/intothevoid/likho/internal/post"
 	"github.com/intothevoid/likho/internal/server"
+	"github.com/intothevoid/likho/pkg/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 	viper.AddConfigPath("../../") // Look two directories up from cmd/likho
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("Error loading config:", err)
+		log.Fatalf("error loading config, %v", err)
 		os.Exit(1)
 	}
 
@@ -32,6 +33,10 @@ func main() {
 	}
 	viper.Set("config", &cfg)
 
+	// Setup logger
+	utils.InitLogger(&cfg)
+	logger := utils.GetLogger()
+
 	rootCmd := &cobra.Command{
 		Use:   "likho",
 		Short: "Likho is a static site generator",
@@ -39,7 +44,7 @@ func main() {
 
 	confPtr, ok := viper.Get("config").(*config.Config)
 	if !ok {
-		log.Fatal("Failed to retrieve configuration")
+		logger.Fatal("failed to retrieve configuration")
 	}
 
 	rootCmd.AddCommand(createCmd(confPtr))
@@ -47,7 +52,7 @@ func main() {
 	rootCmd.AddCommand(serveCmd(confPtr))
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		logger.Error("error executing command", zap.Error(err))
 		os.Exit(1)
 	}
 }

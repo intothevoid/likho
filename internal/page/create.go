@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/pkg/utils"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 func CreatePageCmd(cfg *config.Config) *cobra.Command {
@@ -22,7 +24,7 @@ func CreatePageCmd(cfg *config.Config) *cobra.Command {
 			title := args[0]
 			err := createPage(cfg, title, image, description)
 			if err != nil {
-				fmt.Printf("Error creating page: %v\n", err)
+				utils.GetLogger().Error("error creating page: %v\n", zap.Error(err))
 				return
 			}
 		},
@@ -55,6 +57,6 @@ Write your page content here.
 		return err
 	}
 
-	fmt.Printf("Page created successfully: %s\n", filePath)
+	utils.GetLogger().Sugar().Infof("page created successfully: %s\n", filePath)
 	return nil
 }
