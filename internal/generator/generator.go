@@ -65,6 +65,10 @@ func Generate(cfg *config.Config) error {
 		return err
 	}
 
+	if err := generateTagPages(cfg, posts, pages); err != nil {
+		return err
+	}
+
 	if err := generateSitemap(cfg, posts); err != nil {
 		return err
 	}
@@ -76,6 +80,12 @@ func Generate(cfg *config.Config) error {
 	if err := copyCSSFile(cfg); err != nil {
 		return err
 	}
+
+	// Add this summary log at the end of the Generate function
+	logger.Info("site generation completed",
+		zap.Int("totalPosts", len(posts)),
+		zap.Int("totalPages", len(pages)),
+		zap.String("outputDir", cfg.Content.OutputDir))
 
 	return nil
 }
@@ -106,7 +116,6 @@ func generateHTML(cfg *config.Config, posts []post.Post, pages []parser.Page) er
 	tmplPost, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "post.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
-		filepath.Join(cfg.Content.TemplatesDir, "pages.html"),
 		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
 	if err != nil {
 		return fmt.Errorf("error parsing templates: %v", err)
@@ -281,9 +290,9 @@ func executeTemplate(tmpl *template.Template, name, outputPath string, data inte
 		return fmt.Errorf("error executing template %s: %v", name, err)
 	}
 
-	logger.Debug("template executed successfully",
-		zap.String("name", name),
-		zap.String("outputPath", outputPath))
+	// Add this log after successful template execution
+	logger.Info("html file generated", zap.String("path", outputPath))
+
 	return nil
 }
 
@@ -319,5 +328,56 @@ func copyCSSFile(cfg *config.Config) error {
 	}
 
 	utils.GetLogger().Info("css file copied to", zap.String("path", destPath))
+	return nil
+}
+
+func generateTagPages(cfg *config.Config, posts []post.Post, pages []parser.Page) error {
+	// Create a FuncMap with custom functions
+	funcMap := template.FuncMap{
+		"urlize": urlize,
+	}
+
+	tmpl, err := template.New("").Funcs(funcMap).ParseFiles(filepath.Join(cfg.Content.TemplatesDir, "base.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "tags.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "header.html"),
+		filepath.Join(cfg.Content.TemplatesDir, "footer.html"))
+	if err != nil {
+		return fmt.Errorf("error parsing templates: %v", err)
+	}
+
+	tags := make(map[string][]post.Post)
+	for _, p := range posts {
+		for _, tag := range p.Tags {
+			tags[tag] = append(tags[tag], p)
+		}
+	}
+
+	for tag, tagPosts := range tags {
+		data := struct {
+			Posts       []post.Post
+			Pages       []parser.Page
+			SiteTitle   string
+			CurrentYear int
+			PageTitle   string
+			Tag         string
+		}{
+			Posts:       tagPosts,
+			Pages:       pages,
+			SiteTitle:   cfg.Site.Title,
+			CurrentYear: time.Now().Year(),
+			PageTitle:   fmt.Sprintf("Posts tagged with %s", tag),
+			Tag:         tag,
+		}
+
+		// Use urlize function here to ensure consistency
+		outputPath := filepath.Join(cfg.Content.OutputDir, "tags", urlize(tag)+".html")
+		if err := os.MkdirAll(filepath.Dir(outputPath), 0755); err != nil {
+			return err
+		}
+		if err := executeTemplate(tmpl, "tags.html", outputPath, data); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
