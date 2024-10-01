@@ -16,16 +16,13 @@ import (
 )
 
 func main() {
-	utils.InitLogger()
-	logger := utils.GetLogger()
-
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")      // Look in current directory as well
 	viper.AddConfigPath("../../") // Look two directories up from cmd/likho
 	err := viper.ReadInConfig()
 	if err != nil {
-		logger.Error("error loading config", zap.Error(err))
+		log.Fatalf("error loading config, %v", err)
 		os.Exit(1)
 	}
 
@@ -35,6 +32,10 @@ func main() {
 		log.Fatalf("Unable to decode into struct, %v", err)
 	}
 	viper.Set("config", &cfg)
+
+	// Setup logger
+	utils.InitLogger(&cfg)
+	logger := utils.GetLogger()
 
 	rootCmd := &cobra.Command{
 		Use:   "likho",
