@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,6 +64,7 @@ func TestCreatePageCmd(t *testing.T) {
 }
 
 func TestCreatePage(t *testing.T) {
+
 	// Create a temporary directory for testing
 	tempDir := "likho-test"
 	if _, err := os.Stat(tempDir); !os.IsNotExist(err) {
@@ -90,6 +92,9 @@ func TestCreatePage(t *testing.T) {
 			PagesDir:  "pages",
 		},
 	}
+
+	// Init logger
+	utils.InitLogger(cfg)
 
 	title := "test-page"
 	image := "test-image.jpg"
