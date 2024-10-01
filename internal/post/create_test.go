@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/intothevoid/likho/internal/config"
+	"github.com/intothevoid/likho/pkg/utils"
 )
 
 func TestCreatePost(t *testing.T) {
@@ -40,6 +41,9 @@ func TestCreatePost(t *testing.T) {
 			TemplatesDir: "templates", // Add this line
 		},
 	}
+
+	// Init logger
+	utils.InitLogger(cfg)
 
 	tests := []struct {
 		name           string

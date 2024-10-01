@@ -5,7 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/post"
+	"github.com/intothevoid/likho/pkg/utils"
 )
 
 func TestParsePost(t *testing.T) {
@@ -41,6 +43,11 @@ func TestParsePost(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
+	// Init logger
+	cfg := &config.Config{}
+	utils.InitLogger(cfg)
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ParsePost(tt.args.filePath)
