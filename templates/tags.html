@@ -1,9 +1,9 @@
 {{ define "content" }}
-<h2>Posts tagged with {{ .Tag }}</h2>
+<h2>Posts tagged with "{{ .Tag }}"</h2>
 <ul>
     {{ range .Posts }}
     <li>
-        <a href="/{{ .Slug }}">{{ .Title }}</a> - {{ .Date.Format "2006-01-02" }}
+        <a href="/{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a> - {{ .Date.Format "2006-01-02" }}
     </li>
     {{ end }}
 </ul>
