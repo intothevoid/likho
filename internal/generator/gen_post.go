@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
 	mdparser "github.com/gomarkdown/markdown/parser"
 	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/parser"
@@ -15,9 +16,17 @@ import (
 )
 
 func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, pages []parser.Page) error {
-	// Convert Markdown content to HTML
-	markdownParser := mdparser.New()
-	html := markdown.ToHTML([]byte(p.Content), markdownParser, nil)
+	// Convert Markdown content to HTML with syntax highlighting classes
+	extensions := mdparser.CommonExtensions | mdparser.Attributes
+	markdownParser := mdparser.NewWithExtensions(extensions)
+
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{
+		Flags: htmlFlags,
+	}
+	renderer := html.NewRenderer(opts)
+
+	html := markdown.ToHTML([]byte(p.Content), markdownParser, renderer)
 
 	data := struct {
 		Post        post.Post
