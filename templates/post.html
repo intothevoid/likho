@@ -1,13 +1,14 @@
 {{ define "content" }}
 <h2>{{ .Post.Title }}</h2>
-<p>{{ .Post.Date.Format "2006-01-02" }}</p>
+<p>{{ .Post.Description }}</p>
+<p class="info">Published on {{ .Post.Date.Format "2006-01-02" }}</p>
+{{ .Content }}
 {{ if .Post.Tags }}
-<p>Tags: 
+<p class="info">Tags: 
     {{ range $index, $tag := .Post.Tags }}
         {{ if $index }}, {{ end }}
         <a href="/tags/{{ $tag | urlize }}.html">{{ $tag }}</a>
     {{ end }}
 </p>
 {{ end }}
-{{ .Content }}
 {{ end }}
