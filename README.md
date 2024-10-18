@@ -101,6 +101,24 @@ This command starts a local web server to preview your generated site.
 
 Use this command to see all available commands and their descriptions.
 
+## Generate with Docker
+
+Use the following command to build a Docker image:
+
+```
+docker build -t likho .
+```
+
+To run the Docker container and generate the static site, use:
+
+```
+docker run --rm -v "$(pwd)/content:/app/content:ro" -v "$(pwd)/public:/app/public" likho:latest generate
+```
+
+Note: The following directories are required:
+- content - Contains the markdown files for the site. This is the input directory.
+- public - Will contain the generated static site. This is the output directory.
+
 ## Configuration
 
 Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:
