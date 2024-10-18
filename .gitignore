@@ -31,5 +31,9 @@ likho-test/
 public/**/*
 .DS_Store
 
+# content
+content/posts/**/*
+content/pages/**/*
+
 # build
 cmd/likho/likho

@@ -1,6 +1,6 @@
 # Likho
 
-<a href="content/assets/logo.jpg"><img src="content/assets/logo.jpg" height="300px" alt="Likho Logo"></a>
+<a href="assets/logo.jpg"><img src="assets/logo.jpg" height="300px" alt="Likho Logo"></a>
 
 [![Go](https://github.com/intothevoid/likho/actions/workflows/go.yml/badge.svg)](https://github.com/intothevoid/likho/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/intothevoid/likho)](https://goreportcard.com/report/github.com/intothevoid/likho)
@@ -142,7 +142,7 @@ static:
 - `templates`:
   - `dir`: The directory containing your HTML templates
 
-- `static`:
+- `assets`:
   - `dir`: The directory containing static assets (CSS, images, etc.)
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
@@ -154,14 +154,15 @@ After setting up your Likho project, your directory structure should look like t
 ```
 my-likho-site/
 ├── config.yaml
+├── assets/
+│   └── logo.jpg
+|   └── main.css
 ├── content/
 │   ├── posts/
 │   │   └── YYYY-MM-DD/
 │   │       └── post-slug.md
 │   ├── pages/
 │   │   └── page-slug.md
-│   └── assets/
-│       └── main.css
 ├── templates/
 │   ├── base.html
 │   ├── index.html
