@@ -119,6 +119,14 @@ Note: The following directories are required:
 - content - Contains the markdown files for the site. This is the input directory.
 - public - Will contain the generated static site. This is the output directory.
 
+### Push to Docker Hub
+
+```
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64 -t yourdockerhubusername/likho:latest --push .
+```
+
+
 ## Configuration
 
 Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:

@@ -1,8 +1,10 @@
-FROM golang:1.23-alpine AS builder
+# Use buildx syntax for multi-platform builds
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS builder
 
 WORKDIR /app
 COPY . .
-RUN go build -o likho cmd/likho/main.go
+ARG TARGETOS TARGETARCH
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o likho cmd/likho/main.go
 
 FROM alpine:latest
 
