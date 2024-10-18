@@ -1,6 +1,6 @@
 # Likho
 
-<a href="content/assets/logo.jpg"><img src="content/assets/logo.jpg" height="300px" alt="Likho Logo"></a>
+<a href="assets/logo.jpg"><img src="assets/logo.jpg" height="300px" alt="Likho Logo"></a>
 
 [![Go](https://github.com/intothevoid/likho/actions/workflows/go.yml/badge.svg)](https://github.com/intothevoid/likho/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/intothevoid/likho)](https://goreportcard.com/report/github.com/intothevoid/likho)
@@ -10,6 +10,10 @@
 Likho is a lightweight, fast, and simple static site generator written in Go. 
 
 It's designed to convert markdown files into a fully functional static website with minimal configuration.
+
+# Demo
+
+A demo site (my personal blog) built with Likho can be found at [https://intothevoid.github.io/](https://intothevoid.github.io/)
 
 ## Features
 
@@ -101,6 +105,32 @@ This command starts a local web server to preview your generated site.
 
 Use this command to see all available commands and their descriptions.
 
+## Generate with Docker
+
+Use the following command to build a Docker image:
+
+```
+docker build -t likho .
+```
+
+To run the Docker container and generate the static site, use:
+
+```
+docker run --rm -v "$(pwd)/content:/app/content:ro" -v "$(pwd)/public:/app/public" likho:latest generate
+```
+
+Note: The following directories are required:
+- content - Contains the markdown files for the site. This is the input directory.
+- public - Will contain the generated static site. This is the output directory.
+
+### Push to Docker Hub
+
+```
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64 -t yourdockerhubusername/likho:latest --push .
+```
+
+
 ## Configuration
 
 Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:
@@ -142,7 +172,7 @@ static:
 - `templates`:
   - `dir`: The directory containing your HTML templates
 
-- `static`:
+- `assets`:
   - `dir`: The directory containing static assets (CSS, images, etc.)
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
@@ -154,14 +184,15 @@ After setting up your Likho project, your directory structure should look like t
 ```
 my-likho-site/
 ├── config.yaml
+├── assets/
+│   └── logo.jpg
+|   └── main.css
 ├── content/
 │   ├── posts/
 │   │   └── YYYY-MM-DD/
 │   │       └── post-slug.md
 │   ├── pages/
 │   │   └── page-slug.md
-│   └── assets/
-│       └── main.css
 ├── templates/
 │   ├── base.html
 │   ├── index.html

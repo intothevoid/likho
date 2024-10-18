@@ -36,7 +36,7 @@ func urlize(s string) string {
 }
 
 func copyCSSFile(cfg *config.Config) error {
-	sourcePath := filepath.Join(cfg.Content.SourceDir, "assets", "main.css")
+	sourcePath := filepath.Join("assets", "main.css")
 	destPath := filepath.Join(cfg.Content.OutputDir, "main.css")
 
 	source, err := os.Open(sourcePath)
