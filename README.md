@@ -11,6 +11,10 @@ Likho is a lightweight, fast, and simple static site generator written in Go.
 
 It's designed to convert markdown files into a fully functional static website with minimal configuration.
 
+# Demo
+
+A demo site (my personal blog) built with Likho can be found at [https://intothevoid.github.io/](https://intothevoid.github.io/)
+
 ## Features
 
 - Markdown to HTML conversion
