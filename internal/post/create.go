@@ -29,7 +29,7 @@ func CreatePostCmd(cfg *config.Config) *cobra.Command {
 			}
 			title := args[0]
 			slug := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-			date := time.Now().Format("2006-01-02")
+			date := time.Now()
 			createPost(cfg, title, date, slug, tags, featuredImage, description)
 			return nil
 		},
@@ -42,10 +42,10 @@ func CreatePostCmd(cfg *config.Config) *cobra.Command {
 	return cmd
 }
 
-func createPost(cfg *config.Config, title string, date string, slug string, tags string, featuredImage string, description string) {
+func createPost(cfg *config.Config, title string, date time.Time, slug string, tags string, featuredImage string, description string) {
 	// Create posts directory if it doesn't exist
 	// Create folder structure at root
-	postsDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir, date)
+	postsDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir, date.Format("2006-01-02"))
 	if err := os.MkdirAll(postsDir, os.ModePerm); err != nil {
 		log.Fatalf("Failed to create posts directory: %v", err)
 	}
@@ -79,7 +79,7 @@ description: "%s"
 ---
 
 Your content here.
-`, title, date, strings.Join(tagList, ", "), featuredImage, description)
+`, title, date.Format("January 2, 2006 15:04"), strings.Join(tagList, ", "), featuredImage, description)
 
 	err = os.WriteFile(filename, []byte(content), 0644)
 	if err != nil {

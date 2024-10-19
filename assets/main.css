@@ -199,6 +199,7 @@ header a + a {
   vertical-align: middle;
   padding-right: 2rem;
   color: grey;
+  white-space: nowrap;
 }
 
 .posts .post {
