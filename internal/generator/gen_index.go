@@ -3,6 +3,7 @@ package generator
 import (
 	"html/template"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/intothevoid/likho/internal/config"
@@ -11,6 +12,12 @@ import (
 )
 
 func generateIndexHTML(cfg *config.Config, tmpl *template.Template, posts []post.Post, pages []parser.Page) error {
+	// Sort posts by date in descending order
+	// to get the latest posts at the top
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].Date.After(posts[j].Date)
+	})
+
 	data := struct {
 		Posts       []post.Post
 		Pages       []parser.Page

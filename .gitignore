@@ -37,3 +37,6 @@ content/pages/**/*
 
 # build
 cmd/likho/likho
+
+# post importer
+scripts/post_importer/venv

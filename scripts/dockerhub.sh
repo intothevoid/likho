@@ -10,4 +10,4 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
 fi
 
 docker buildx create --use
-docker buildx build --platform linux/amd64,linux/arm64 -t $1/$2:$3 --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t $1/$2:$3 --push ..
