@@ -34,6 +34,7 @@ public/**/*
 # content
 content/posts/**/*
 content/pages/**/*
+content/images/**/*
 
 # build
 cmd/likho/likho

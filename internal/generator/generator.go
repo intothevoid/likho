@@ -14,6 +14,11 @@ import (
 func Generate(cfg *config.Config) error {
 	logger := utils.GetLogger()
 
+	// remove the images directory
+	if err := removeImagesDir(cfg.Content.OutputDir); err != nil {
+		return err
+	}
+
 	// Remove existing HTML files from the output directory
 	if err := removeGeneratedFiles(cfg.Content.OutputDir); err != nil {
 		if os.IsNotExist(err) {
@@ -55,6 +60,10 @@ func Generate(cfg *config.Config) error {
 	}
 
 	if err := copyCSSFile(cfg); err != nil {
+		return err
+	}
+
+	if err := copyImages(cfg); err != nil {
 		return err
 	}
 

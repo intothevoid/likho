@@ -18,6 +18,7 @@ type Config struct {
 		OutputDir    string `mapstructure:"output_dir"`
 		TemplatesDir string `mapstructure:"templates_dir"`
 		PagesDir     string `mapstructure:"pages_dir"`
+		ImagesDir    string `mapstructure:"images_dir"`
 		PostsPerPage int    `mapstructure:"posts_per_page"`
 	} `mapstructure:"content"`
 	Theme struct {

@@ -35,6 +35,68 @@ func urlize(s string) string {
 	return s
 }
 
+func copyImages(cfg *config.Config) error {
+	sourceDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.ImagesDir)
+	destinationDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.ImagesDir)
+
+	return copyDir(sourceDir, destinationDir)
+}
+
+func copyDir(src, dst string) error {
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		relPath, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+		destPath := filepath.Join(dst, relPath)
+
+		if info.IsDir() {
+			err = os.MkdirAll(destPath, info.Mode())
+			if err != nil {
+				return fmt.Errorf("failed to create directory %s: %v", destPath, err)
+			}
+		} else {
+			// Copy file
+			sourceFile, err := os.Open(path)
+			if err != nil {
+				return fmt.Errorf("error opening source file: %v", err)
+			}
+			defer sourceFile.Close()
+
+			destFile, err := os.Create(destPath)
+			if err != nil {
+				return fmt.Errorf("error creating destination file: %v", err)
+			}
+			defer destFile.Close()
+
+			// Preserve permissions
+			info, _ := sourceFile.Stat()
+			err = os.Chmod(destPath, info.Mode())
+			if err != nil {
+				return fmt.Errorf("error changing permissions for destination file: %v", err)
+			}
+
+			// Copy contents
+			_, err = io.Copy(destFile, sourceFile)
+			if err != nil {
+				return fmt.Errorf("error copying file contents: %v", err)
+			}
+
+			// Preserve timestamps
+			err = os.Chtimes(destPath, info.ModTime(), info.ModTime())
+			if err != nil {
+				return fmt.Errorf("error setting timestamps for destination file: %v", err)
+			}
+		}
+
+		return nil
+	})
+}
+
 func copyCSSFile(cfg *config.Config) error {
 	sourcePath := filepath.Join("assets", "main.css")
 	destPath := filepath.Join(cfg.Content.OutputDir, "main.css")
@@ -81,4 +143,9 @@ func removeGeneratedFiles(dir string) error {
 		}
 		return nil
 	})
+}
+
+func removeImagesDir(outputDir string) error {
+	imagesDir := filepath.Join(outputDir, "images")
+	return os.RemoveAll(imagesDir)
 }
