@@ -20,6 +20,7 @@ func TestCreatePageCmd(t *testing.T) {
 			OutputDir    string `mapstructure:"output_dir"`
 			TemplatesDir string `mapstructure:"templates_dir"`
 			PagesDir     string `mapstructure:"pages_dir"`
+			ImagesDir    string `mapstructure:"images_dir"`
 			PostsPerPage int    `mapstructure:"posts_per_page"`
 		}{
 			SourceDir: "testdata",
@@ -86,6 +87,7 @@ func TestCreatePage(t *testing.T) {
 			OutputDir    string `mapstructure:"output_dir"`
 			TemplatesDir string `mapstructure:"templates_dir"`
 			PagesDir     string `mapstructure:"pages_dir"`
+			ImagesDir    string `mapstructure:"images_dir"`
 			PostsPerPage int    `mapstructure:"posts_per_page"`
 		}{
 			SourceDir: tempDir,

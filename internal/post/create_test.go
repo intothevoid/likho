@@ -34,11 +34,13 @@ func TestCreatePost(t *testing.T) {
 			OutputDir    string "mapstructure:\"output_dir\""
 			TemplatesDir string "mapstructure:\"templates_dir\""
 			PagesDir     string "mapstructure:\"pages_dir\""
+			ImagesDir    string "mapstructure:\"images_dir\""
 			PostsPerPage int    "mapstructure:\"posts_per_page\""
 		}{
 			SourceDir:    tempDir,
 			PostsDir:     "posts",
-			TemplatesDir: "templates", // Add this line
+			TemplatesDir: "templates",
+			PostsPerPage: 10,
 		},
 	}
 
