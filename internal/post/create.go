@@ -79,7 +79,7 @@ description: "%s"
 ---
 
 Your content here.
-`, title, date.Format("January 2, 2006 15:04"), strings.Join(tagList, ", "), featuredImage, description)
+`, title, date.Format("2006-01-02T15:04:05Z07:00"), strings.Join(tagList, ", "), featuredImage, description)
 
 	err = os.WriteFile(filename, []byte(content), 0644)
 	if err != nil {

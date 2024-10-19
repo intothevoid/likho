@@ -57,12 +57,15 @@ func ParsePost(filePath string) (post.Post, error) {
 		return post.Post{}, err
 	}
 
-	// Parse the date string into a time.Time object
+	// Parse the date string into a time.Time object, try multiple formats
 	date, err := time.Parse("January 2, 2006 15:04", meta.Date)
 	if err != nil {
-		date, err = time.Parse("2006-01-02", meta.Date)
+		date, err = time.Parse("2006-01-02T15:04:05Z07:00", meta.Date)
 		if err != nil {
-			return post.Post{}, err
+			date, err = time.Parse("2006-01-02", meta.Date)
+			if err != nil {
+				return post.Post{}, err
+			}
 		}
 	}
 
