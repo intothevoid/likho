@@ -25,3 +25,29 @@ func main() {
 }
 ```
 
+These are some mermaid diagrams -
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant System
+    User->>System: Request data
+    System->>System: Process request
+    System-->>User: Return result
+```
+
+```mermaid
+pie title Programming Languages
+    "JavaScript" : 30
+    "Python" : 25
+    "Go" : 20
+    "Java" : 15
+    "Other" : 10
+```
+
+```mermaid
+graph TD
+    A[Start] --> B{Is it?}
+    B -->|Yes| C[OK]
+    C --> D[Return]
+```

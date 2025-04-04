@@ -22,5 +22,22 @@
 {{ define "prism-foot" }}
 <script>
     Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/';
+    
+    // Initialize Mermaid diagrams after the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all pre elements with language-mermaid class
+        document.querySelectorAll('pre.language-mermaid').forEach(function(element) {
+            // Create a div for mermaid
+            var mermaidDiv = document.createElement('div');
+            mermaidDiv.className = 'mermaid';
+            mermaidDiv.innerHTML = element.textContent;
+            
+            // Replace the pre element with the mermaid div
+            element.parentNode.replaceChild(mermaidDiv, element);
+        });
+        
+        // Re-initialize mermaid to render the diagrams
+        mermaid.init();
+    });
 </script>
 {{ end }}

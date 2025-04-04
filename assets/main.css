@@ -284,3 +284,52 @@ li > code {
   padding: 2px 4px;
   border-radius: 4px;
 }
+
+/* Mermaid diagram styles */
+.mermaid {
+    background-color: white;
+    padding: 1em;
+    margin: 1em 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto !important;
+    margin: 0 auto;
+}
+
+/* Ensure Mermaid diagrams are responsive */
+.mermaid > svg {
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* Style Mermaid diagram text */
+.mermaid .label {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+}
+
+/* Style Mermaid nodes */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+    fill: #fff;
+    stroke: #333;
+    stroke-width: 1px;
+}
+
+/* Style Mermaid edges */
+.mermaid .edgePath .path {
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+.mermaid .arrowheadPath {
+    fill: #333;
+    stroke: none;
+}
