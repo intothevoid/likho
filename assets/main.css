@@ -31,7 +31,7 @@ h1, h2, h3, h4 {
 }
 
 a {
-  color: #fa6432;
+  color: #2596be;
   text-decoration: none;
 }
 a:hover, a:focus, a:active {
@@ -84,7 +84,7 @@ img {
 blockquote {
   padding-left: 1em;
   font-style: italic;
-  border-left: solid 1px #fa6432;
+  border-left: solid 1px #2596be;
 }
 
 table {
@@ -120,7 +120,7 @@ table, .highlight > pre, pre.example {
   overflow: auto;
   font-size: 0.85rem;
   font-family: monospace, monospace;
-  border: 1px dashed rgba(250, 100, 50, 0.5);
+  border: 1px dashed rgba(37, 150, 190, 0.5);
 }
 
 .title {
@@ -160,7 +160,7 @@ figure figcaption {
 .footnote-definition .footnote-body {
   margin: 1em 0;
   padding: 0 1em;
-  border: 1px dashed rgba(250, 100, 50, 0.3);
+  border: 1px dashed rgba(37, 150, 190, 0.3);
   background-color: rgba(200, 200, 200, 0.2);
 }
 .footnote-definition .footnote-body p:only-child {
@@ -230,7 +230,7 @@ header a + a {
 }
 
 .posts .post a:hover, .posts .post a:focus {
-  background-color: rgba(250, 100, 50, 0.05);
+  background-color: rgba(37, 150, 190, 0.05);
 }
 
 .posts .post date {
@@ -257,7 +257,7 @@ footer {
 }
 
 .footer-content a {
-    color: #fa6432;
+    color: #2596be;
     text-decoration: none;
 }
 
