@@ -1,0 +1,16 @@
+name: "default"
+version: "1.0.0"
+description: "Default theme for Likho static site generator"
+author: "Karan Kadam"
+license: "MIT"
+
+assets:
+  css:
+    - "static/css/main.css"
+  js: []
+  images: []
+
+features:
+  syntax_highlighting: true
+  responsive: true
+  dark_mode: false 
