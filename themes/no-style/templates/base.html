@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .SiteTitle }}{{ if .PageTitle }} - {{ .PageTitle }}{{ end }}</title>
+    <link rel="stylesheet" href="/css/main.css">
+    {{ block "prism-head" . }}{{ end }}
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</head>
+<body>
+    {{ template "header" . }}
+    <main>
+    {{ block "content" . }}{{ end }}
+    {{ block "prism-foot" . }}{{ end }}
+    <main>
+    {{ template "footer" . }}
+</body>
+</html>

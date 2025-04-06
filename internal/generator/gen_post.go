@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"html/template"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -60,7 +61,13 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, 
 		return -1
 	}, fileName)
 
-	outputPath := filepath.Join(cfg.Content.OutputDir, fileName)
+	// Create posts directory if it doesn't exist
+	postsDir := filepath.Join(cfg.Content.OutputDir, "posts")
+	if err := os.MkdirAll(postsDir, 0755); err != nil {
+		return fmt.Errorf("failed to create posts directory: %w", err)
+	}
+
+	outputPath := filepath.Join(postsDir, fileName)
 
 	return executeTemplate(tmpl, "post.html", outputPath, data)
 }

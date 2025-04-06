@@ -5,7 +5,7 @@
     <ul class="posts">
     {{ range .Posts }}
         <li class="post">
-            <a href="{{ .Title | urlize }}-{{ .Slug }}.html">
+            <a href="/posts/{{ .Title | urlize }}-{{ .Slug }}.html">
                 <date>{{ .Date.Format "Jan 2 2006" }}</date>
                 <div>
                     <h2>{{ .Title }}</h2>

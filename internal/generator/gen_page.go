@@ -1,7 +1,9 @@
 package generator
 
 import (
+	"fmt"
 	"html/template"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -24,6 +26,12 @@ func generatePageHTML(cfg *config.Config, tmpl *template.Template, page parser.P
 		Pages:       pages,
 	}
 
-	outputPath := filepath.Join(cfg.Content.OutputDir, page.Slug+".html")
+	// Create pages directory if it doesn't exist
+	pagesDir := filepath.Join(cfg.Content.OutputDir, "pages")
+	if err := os.MkdirAll(pagesDir, 0755); err != nil {
+		return fmt.Errorf("failed to create pages directory: %w", err)
+	}
+
+	outputPath := filepath.Join(pagesDir, page.Slug+".html")
 	return executeTemplate(tmpl, "pages.html", outputPath, data)
 }
