@@ -11,30 +11,19 @@ import (
 	"github.com/intothevoid/likho/internal/server"
 	"github.com/intothevoid/likho/pkg/utils"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
 func main() {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")      // Look in current directory as well
-	viper.AddConfigPath("../../") // Look two directories up from cmd/likho
-	err := viper.ReadInConfig()
+	// Load configuration
+	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("error loading config, %v", err)
+		log.Fatalf("error loading config: %v", err)
 		os.Exit(1)
 	}
 
-	var cfg config.Config
-	err = viper.Unmarshal(&cfg)
-	if err != nil {
-		log.Fatalf("Unable to decode into struct, %v", err)
-	}
-	viper.Set("config", &cfg)
-
 	// Setup logger
-	utils.InitLogger(&cfg)
+	utils.InitLogger(cfg)
 	logger := utils.GetLogger()
 
 	rootCmd := &cobra.Command{
@@ -42,14 +31,9 @@ func main() {
 		Short: "Likho is a static site generator",
 	}
 
-	confPtr, ok := viper.Get("config").(*config.Config)
-	if !ok {
-		logger.Fatal("failed to retrieve configuration")
-	}
-
-	rootCmd.AddCommand(createCmd(confPtr))
-	rootCmd.AddCommand(generateCmd(confPtr))
-	rootCmd.AddCommand(serveCmd(confPtr))
+	rootCmd.AddCommand(createCmd(cfg))
+	rootCmd.AddCommand(generateCmd(cfg))
+	rootCmd.AddCommand(serveCmd(cfg))
 
 	if err := rootCmd.Execute(); err != nil {
 		logger.Error("error executing command", zap.Error(err))
@@ -84,7 +68,12 @@ func serveCmd(cfg *config.Config) *cobra.Command {
 		Use:   "serve",
 		Short: "Serve the generated blog",
 		Run: func(cmd *cobra.Command, args []string) {
-			server.Serve(cfg)
+			logger := utils.GetLogger()
+			logger.Info("Starting server...")
+			if err := server.Serve(cfg); err != nil {
+				logger.Error("error serving site", zap.Error(err))
+				os.Exit(1)
+			}
 		},
 	}
 }

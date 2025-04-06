@@ -10,8 +10,7 @@ FROM alpine:latest
 
 WORKDIR /app
 COPY --from=builder /app/likho /app/likho
-COPY templates /app/templates
 COPY config.yaml /app/config.yaml
-COPY assets /app/assets
+COPY themes /app/themes
 
 ENTRYPOINT ["/app/likho"]

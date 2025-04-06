@@ -27,7 +27,13 @@ content:
 # Theme Settings
 theme:
   name: "default"
-  syntax_highlighting: true
+  path: "themes/default"
+  features:
+    syntax_highlighting: true
+    dark_mode: false
+  custom:
+    primary_color: "#2596be"
+    font_family: "sans-serif"
 
 # Build Settings
 build:

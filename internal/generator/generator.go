@@ -7,12 +7,25 @@ import (
 
 	"github.com/intothevoid/likho/internal/config"
 	"github.com/intothevoid/likho/internal/parser"
+	"github.com/intothevoid/likho/internal/theme"
 	"github.com/intothevoid/likho/pkg/utils"
 	"go.uber.org/zap"
 )
 
 func Generate(cfg *config.Config) error {
 	logger := utils.GetLogger()
+
+	// Initialize theme manager
+	themeManager, err := theme.NewThemeManager(cfg.Theme.Name, cfg.Content.OutputDir)
+	if err != nil {
+		return fmt.Errorf("failed to initialize theme manager: %v", err)
+	}
+
+	// Create the output directory if it doesn't exist
+	if err := os.MkdirAll(cfg.Content.OutputDir, 0755); err != nil {
+		logger.Error("error creating output directory", zap.Error(err))
+		return fmt.Errorf("error creating output directory: %v", err)
+	}
 
 	// remove the images directory
 	if err := removeImagesDir(cfg.Content.OutputDir); err != nil {
@@ -21,16 +34,8 @@ func Generate(cfg *config.Config) error {
 
 	// Remove existing HTML files from the output directory
 	if err := removeGeneratedFiles(cfg.Content.OutputDir); err != nil {
-		if os.IsNotExist(err) {
-			// Create the output directory if it doesn't exist
-			if err := os.MkdirAll(cfg.Content.OutputDir, 0755); err != nil {
-				logger.Error("error creating output directory", zap.Error(err))
-				return fmt.Errorf("error creating output directory: %v", err)
-			}
-		} else {
-			logger.Error("error removing existing HTML files", zap.Error(err))
-			return fmt.Errorf("error removing existing HTML files: %v", err)
-		}
+		logger.Error("error removing existing HTML files", zap.Error(err))
+		return fmt.Errorf("error removing existing HTML files: %v", err)
 	}
 
 	posts, err := parser.ParsePosts(filepath.Join(cfg.Content.SourceDir, cfg.Content.PostsDir))
@@ -42,6 +47,14 @@ func Generate(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
+
+	// Copy theme assets
+	if err := themeManager.CopyAssets(); err != nil {
+		return fmt.Errorf("failed to copy theme assets: %v", err)
+	}
+
+	// Update templates directory to use theme templates
+	cfg.Content.TemplatesDir = themeManager.GetTemplatePath()
 
 	if err := generateHTML(cfg, posts, pages); err != nil {
 		return err
@@ -59,10 +72,6 @@ func Generate(cfg *config.Config) error {
 		return err
 	}
 
-	if err := copyCSSFile(cfg); err != nil {
-		return err
-	}
-
 	if err := copyImages(cfg); err != nil {
 		return err
 	}
@@ -71,7 +80,8 @@ func Generate(cfg *config.Config) error {
 	logger.Info("site generation completed",
 		zap.Int("totalPosts", len(posts)),
 		zap.Int("totalPages", len(pages)),
-		zap.String("outputDir", cfg.Content.OutputDir))
+		zap.String("outputDir", cfg.Content.OutputDir),
+		zap.String("theme", cfg.Theme.Name))
 
 	return nil
 }
