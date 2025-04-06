@@ -53,7 +53,11 @@ func (tm *ThemeManager) CopyAssets() error {
 	// Copy CSS files
 	for _, css := range tm.config.Assets.CSS {
 		srcPath := filepath.Join(tm.themePath, "static", css)
-		dstPath := filepath.Join(tm.outputPath, "css", filepath.Base(css))
+		dstPath := filepath.Join(tm.outputPath, css)
+		if _, err := os.Stat(srcPath); os.IsNotExist(err) {
+			tm.logger.Warn("CSS file not found, skipping", zap.String("path", srcPath))
+			continue
+		}
 		if err := copyFile(srcPath, dstPath); err != nil {
 			return fmt.Errorf("failed to copy CSS file %s: %v", css, err)
 		}
@@ -61,8 +65,12 @@ func (tm *ThemeManager) CopyAssets() error {
 
 	// Copy JS files
 	for _, js := range tm.config.Assets.JS {
-		srcPath := filepath.Join(tm.themePath, "static", "js", js)
-		dstPath := filepath.Join(tm.outputPath, "js", filepath.Base(js))
+		srcPath := filepath.Join(tm.themePath, "static", js)
+		dstPath := filepath.Join(tm.outputPath, js)
+		if _, err := os.Stat(srcPath); os.IsNotExist(err) {
+			tm.logger.Warn("JS file not found, skipping", zap.String("path", srcPath))
+			continue
+		}
 		if err := copyFile(srcPath, dstPath); err != nil {
 			return fmt.Errorf("failed to copy JS file %s: %v", js, err)
 		}
@@ -70,8 +78,12 @@ func (tm *ThemeManager) CopyAssets() error {
 
 	// Copy image files
 	for _, img := range tm.config.Assets.Images {
-		srcPath := filepath.Join(tm.themePath, "static", "images", img)
-		dstPath := filepath.Join(tm.outputPath, "images", filepath.Base(img))
+		srcPath := filepath.Join(tm.themePath, "static", img)
+		dstPath := filepath.Join(tm.outputPath, img)
+		if _, err := os.Stat(srcPath); os.IsNotExist(err) {
+			tm.logger.Warn("Image file not found, skipping", zap.String("path", srcPath))
+			continue
+		}
 		if err := copyFile(srcPath, dstPath); err != nil {
 			return fmt.Errorf("failed to copy image file %s: %v", img, err)
 		}
