@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"html/template"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -29,6 +30,12 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, 
 
 	html := markdown.ToHTML([]byte(p.Content), markdownParser, renderer)
 
+	// Convert relative image paths to absolute paths in HTML
+	htmlStr := string(html)
+	htmlStr = strings.ReplaceAll(htmlStr, "src=\"images/", "src=\"/images/")
+	htmlStr = strings.ReplaceAll(htmlStr, "src=\"../images/", "src=\"/images/")
+	htmlStr = strings.ReplaceAll(htmlStr, "src=\"./images/", "src=\"/images/")
+
 	data := struct {
 		Post        post.Post
 		Content     template.HTML
@@ -38,7 +45,7 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, 
 		Pages       []parser.Page
 	}{
 		Post:        p,
-		Content:     template.HTML(html),
+		Content:     template.HTML(htmlStr),
 		SiteTitle:   cfg.Site.Title,
 		CurrentYear: time.Now().Year(),
 		PageTitle:   p.Title,
@@ -60,7 +67,13 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, 
 		return -1
 	}, fileName)
 
-	outputPath := filepath.Join(cfg.Content.OutputDir, fileName)
+	// Create posts directory if it doesn't exist
+	postsDir := filepath.Join(cfg.Content.OutputDir, "posts")
+	if err := os.MkdirAll(postsDir, 0755); err != nil {
+		return fmt.Errorf("failed to create posts directory: %w", err)
+	}
+
+	outputPath := filepath.Join(postsDir, fileName)
 
 	return executeTemplate(tmpl, "post.html", outputPath, data)
 }

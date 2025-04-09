@@ -14,15 +14,7 @@ import (
 
 func TestCreatePageCmd(t *testing.T) {
 	cfg := &config.Config{
-		Content: struct {
-			SourceDir    string `mapstructure:"source_dir"`
-			PostsDir     string `mapstructure:"posts_dir"`
-			OutputDir    string `mapstructure:"output_dir"`
-			TemplatesDir string `mapstructure:"templates_dir"`
-			PagesDir     string `mapstructure:"pages_dir"`
-			ImagesDir    string `mapstructure:"images_dir"`
-			PostsPerPage int    `mapstructure:"posts_per_page"`
-		}{
+		Content: config.ContentConfig{
 			SourceDir: "testdata",
 			PagesDir:  "pages",
 		},
@@ -65,8 +57,6 @@ func TestCreatePageCmd(t *testing.T) {
 }
 
 func TestCreatePage(t *testing.T) {
-
-	// Create a temporary directory for testing
 	tempDir := "likho-test"
 	if _, err := os.Stat(tempDir); !os.IsNotExist(err) {
 		err = os.RemoveAll(tempDir)
@@ -81,15 +71,7 @@ func TestCreatePage(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	cfg := &config.Config{
-		Content: struct {
-			SourceDir    string `mapstructure:"source_dir"`
-			PostsDir     string `mapstructure:"posts_dir"`
-			OutputDir    string `mapstructure:"output_dir"`
-			TemplatesDir string `mapstructure:"templates_dir"`
-			PagesDir     string `mapstructure:"pages_dir"`
-			ImagesDir    string `mapstructure:"images_dir"`
-			PostsPerPage int    `mapstructure:"posts_per_page"`
-		}{
+		Content: config.ContentConfig{
 			SourceDir: tempDir,
 			PagesDir:  "pages",
 		},

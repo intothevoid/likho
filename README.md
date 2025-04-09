@@ -23,6 +23,14 @@ A demo site (my personal blog) built with Likho can be found at [https://intothe
 - Automatic sitemap and RSS feed generation
 - Command-line interface for easy management
 - Support for creating both posts and pages
+- Syntax highlighting for code blocks
+- Mermaid diagrams
+- Responsive design
+- Dark mode
+- Pagination for posts
+- Customizable theme
+- Easy to understand and modify
+- Lightweight and fast
 
 ## Installation
 
@@ -155,25 +163,65 @@ static:
   dir: "static"
 
 ```
-### Configuration options:
+## Configuration
 
-- `site`:
-  - `title`: The title of your blog
-  - `description`: A brief description of your blog
-  - `baseURL`: The base URL where your site will be hosted
+Your site's configuration is stored in `config.yaml`. Here's an example configuration:
 
-- `content`:
-  - `sourceDir`: The directory containing your content files
-  - `postsDir`: The subdirectory within `sourceDir` where posts are stored
+```yaml
+# Site Information
+site:
+  title: "My Awesome Blog"
+  description: "A blog about awesome things"
+  base_url: "https://example.com"
+  language: "en"
 
-- `output`:
-  - `publicDir`: The directory where generated HTML files will be placed
+# Content Settings
+content:
+  source_dir: "content"
+  posts_dir: "posts"
+  output_dir: "public"
+  templates_dir: "templates"
+  pages_dir: "pages"
+  posts_per_page: 10
+  images_dir: "images"
 
-- `templates`:
-  - `dir`: The directory containing your HTML templates
+# Theme Settings
+theme:
+  name: "default"
+  path: "themes/default"
+  features:
+    syntax_highlighting: true
+    dark_mode: false
+  custom:
+    primary_color: "#2596be"
+    font_family: "sans-serif"
 
-- `assets`:
-  - `dir`: The directory containing static assets (CSS, images, etc.)
+# Build Settings
+build:
+  draft: false
+  future: false
+
+# Server Settings
+server:
+  port: 8080
+  host: "localhost"
+
+# Social Media Links
+social:
+  twitter: "https://twitter.com/username"
+  github: "https://github.com/username"
+  linkedin: "https://linkedin.com/in/username"
+
+# Additional Features
+features:
+  comments: false
+  search: true
+  rss: true
+
+# Custom Variables
+custom:
+  google_analytics: "UA-XXXXXXXXX-X"
+  disqus_shortname: "your-disqus-shortname"
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
 
@@ -184,25 +232,82 @@ After setting up your Likho project, your directory structure should look like t
 ```
 my-likho-site/
 ├── config.yaml
-├── assets/
-│   └── logo.jpg
-|   └── main.css
 ├── content/
 │   ├── posts/
 │   │   └── YYYY-MM-DD/
 │   │       └── post-slug.md
 │   ├── pages/
 │   │   └── page-slug.md
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   ├── post.html
-│   ├── pages.html
-│   ├── header.html
-│   └── footer.html
+│   └── images/
+├── themes/
+│   └── default/
+│       ├── theme.yaml
+│       ├── static/
+│       │   ├── css/
+│       │   │   └── main.css
+│       │   ├── js/
+│       │   └── images/
+│       └── templates/
+│           ├── base.html
+│           ├── index.html
+│           ├── post.html
+│           ├── pages.html
+│           ├── header.html
+│           └── footer.html
 └── public/
     └── (generated files)
 ```
+
+## Themes
+
+Likho supports multiple themes. Each theme is stored in its own directory under the `themes` folder. A theme consists of:
+
+1. `theme.yaml` - Theme configuration file
+2. `static/` - Static assets (CSS, JS, images)
+3. `templates/` - HTML templates
+
+### Theme Configuration
+
+Each theme must have a `theme.yaml` file that defines its configuration:
+
+```yaml
+name: "theme-name"
+version: "1.0.0"
+description: "Theme description"
+author: "Theme Author"
+license: "MIT"
+
+assets:
+  css:
+    - "static/css/main.css"
+  js: []
+  images: []
+
+features:
+  syntax_highlighting: true
+  responsive: true
+  dark_mode: false
+```
+
+### Creating a New Theme
+
+To create a new theme:
+
+1. Create a new directory under `themes/` with your theme name
+2. Create the required directory structure:
+   ```
+   themes/my-theme/
+   ├── theme.yaml
+   ├── static/
+   │   ├── css/
+   │   ├── js/
+   │   └── images/
+   └── templates/
+   ```
+3. Create your theme configuration in `theme.yaml`
+4. Add your CSS, JS, and image files
+5. Create your HTML templates
+6. Update your `config.yaml` to use your new theme
 
 ## Contributing
 

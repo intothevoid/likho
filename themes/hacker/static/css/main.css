@@ -1,0 +1,267 @@
+/* 
+The original idea for this was taken from https://niklasfasching.de/posts/just-enough-css/
+Over time, this has evolved to suit Likho's needs (https://www.github.com/intothevoid/likho)
+*/
+
+/* Import cyberpunk fonts */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Matrix/Cyberpunk color scheme */
+  --bg-color: #0a0e12;
+  --text-color: #00ff00;
+  --link-color: #00ffbb;
+  --accent-color: #ff00ff;
+  --secondary-color: #39ff14;
+  --terminal-color: #001800;
+  --glow-color: #00ff0033;
+  --header-color: #80ff00;
+  --date-color: #008f11;
+  --code-bg: #001100;
+  --selection-bg: #00ff0022;
+  --selection-text: #fff;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Selection style */
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Share Tech Mono', monospace;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem;
+  text-shadow: 0 0 5px var(--glow-color);
+  background-image: 
+    linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  color: var(--header-color);
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 2rem 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+h1::before {
+  content: "# ";
+  color: var(--accent-color);
+}
+
+h2::before {
+  content: "## ";
+  color: var(--accent-color);
+}
+
+/* Links */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+a:hover {
+  color: var(--accent-color);
+  text-shadow: 0 0 8px var(--glow-color);
+}
+
+a::before {
+  content: "[";
+  opacity: 0;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+}
+
+a::after {
+  content: "]";
+  opacity: 0;
+  margin-left: 5px;
+  transition: all 0.3s ease;
+}
+
+a:hover::before,
+a:hover::after {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+/* Header */
+header {
+  border-bottom: 1px solid var(--text-color);
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header nav a {
+  margin-left: 2rem;
+  color: var(--secondary-color);
+}
+
+/* Content */
+.post-date {
+  color: var(--date-color);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.post-date::before {
+  content: "[ ";
+  color: var(--accent-color);
+}
+
+.post-date::after {
+  content: " ]";
+  color: var(--accent-color);
+}
+
+/* Code blocks */
+pre, code {
+  background-color: var(--code-bg);
+  border: 1px solid var(--text-color);
+  border-radius: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.4rem;
+  position: relative;
+}
+
+pre {
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+pre::before {
+  content: "$ ";
+  color: var(--accent-color);
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+li::before {
+  content: "> ";
+  color: var(--accent-color);
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 3px solid var(--accent-color);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  color: var(--secondary-color);
+  background-color: var(--terminal-color);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: var(--terminal-color);
+}
+
+th, td {
+  border: 1px solid var(--text-color);
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: var(--code-bg);
+  color: var(--accent-color);
+}
+
+/* Posts list */
+.posts {
+  list-style: none;
+  padding: 0;
+}
+
+.post {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--text-color);
+  background-color: var(--terminal-color);
+  transition: all 0.3s ease;
+}
+
+.post:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px var(--glow-color);
+  transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--text-color);
+  text-align: center;
+  color: var(--date-color);
+}
+
+/* Animations */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.post-title::after {
+  content: "_";
+  animation: cursor-blink 1s infinite;
+  color: var(--accent-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}

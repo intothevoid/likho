@@ -13,8 +13,6 @@ func TestLoad(t *testing.T) {
 	configContent := `
 content:
   source_dir: "content"
-  posts_dir: ""
-  templates_dir: ""
 `
 	configFile, err := os.Create("config.yaml")
 	assert.NoError(t, err)

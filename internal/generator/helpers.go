@@ -39,6 +39,12 @@ func copyImages(cfg *config.Config) error {
 	sourceDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.ImagesDir)
 	destinationDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.ImagesDir)
 
+	// Check if source directory exists
+	if _, err := os.Stat(sourceDir); os.IsNotExist(err) {
+		// Source directory doesn't exist, create destination directory and return
+		return os.MkdirAll(destinationDir, 0755)
+	}
+
 	return copyDir(sourceDir, destinationDir)
 }
 
@@ -147,5 +153,9 @@ func removeGeneratedFiles(dir string) error {
 
 func removeImagesDir(outputDir string) error {
 	imagesDir := filepath.Join(outputDir, "images")
+	// Check if directory exists before trying to remove it
+	if _, err := os.Stat(imagesDir); os.IsNotExist(err) {
+		return nil
+	}
 	return os.RemoveAll(imagesDir)
 }

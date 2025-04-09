@@ -1,0 +1,410 @@
+/* 
+The original idea for this was taken from https://niklasfasching.de/posts/just-enough-css/
+Over time, this has evolved to suit Likho's needs (https://www.github.com/intothevoid/likho)
+*/
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base styles */
+body {
+    font-family: monospace;
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background: #000;
+    color: #fff;
+}
+
+/* Typography */
+h1, h2 {
+    margin: 1.5rem 0 0.5rem;
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+/* Links */
+a {
+    color: #ff0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Lists */
+ul {
+    list-style-type: none;
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+}
+
+li {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul {
+    margin: 0;
+    padding-left: 2rem;
+}
+
+/* Date */
+.date {
+    color: #666;
+}
+
+/* Content */
+main {
+    margin-top: 2rem;
+}
+
+/* Posts */
+.posts {
+    margin: 0;
+    padding: 0;
+}
+
+.post {
+    margin: 0.5rem 0;
+}
+
+/* Code blocks */
+pre {
+    margin: 1rem 0;
+    padding: 1rem;
+    overflow-x: auto;
+    background: #111;
+}
+
+code {
+    font-family: monospace;
+}
+
+/* Back link */
+p:last-child {
+    margin-top: 2rem;
+}
+
+html {
+  overflow-y: scroll;
+  height: 100%;
+  font: 100%/1.5 sans-serif;
+  word-wrap: break-word;
+  margin: 0 auto;
+  padding: 1.5em;
+}
+
+@media (min-width: 768px) {
+  html {
+      font-size: 125%;
+      max-width: 42em;
+} }
+
+h1, h2, h3, h4 {
+  margin: 2.5rem 0 1.5rem 0;
+  line-height: 1.25;
+  color: #333;
+}
+
+p {
+  margin: 1em 0;
+  line-height: 1.5;
+}
+p code {
+  background-color: #eee;
+  padding: 0.05em 0.2em;
+  border: 1px solid #ccc;
+}
+
+.info {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5em 0;
+}
+
+ol, ul {
+  margin: 1em;
+}
+ol li ol, ol li ul, ul li ol, ul li ul {
+  margin: 0 2em;
+}
+ol li p, ul li p {
+  margin: 0;
+}
+
+dl {
+  font-family: monospace, monospace;
+}
+dl dt {
+  font-weight: bold;
+}
+dl dd {
+  margin: -1em 0 1em 1em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  padding: 0.5em;
+}
+
+blockquote {
+  padding-left: 1em;
+  font-style: italic;
+  border-left: solid 1px #2596be;
+}
+
+table {
+  font-size: 1rem;
+  text-align: left;
+  caption-side: bottom;
+  margin-bottom: 2em;
+}
+table * {
+  border: none;
+}
+table thead, table tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+table tr:nth-child(even) {
+  background-color: rgba(200, 200, 200, 0.2);
+}
+table tbody {
+  display: block;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+table td, table th {
+  padding: 0.25em;
+}
+
+table, .highlight > pre, pre.example {
+  max-height: 70vh;
+  margin: 1em 0;
+  padding: 1em;
+  overflow: auto;
+  font-size: 0.85rem;
+  font-family: monospace, monospace;
+  border: 1px dashed rgba(37, 150, 190, 0.5);
+}
+
+.title {
+  font-size: 2.5em;
+}
+
+.subtitle {
+  font-weight: normal;
+  font-size: 0.75em;
+  color: #666;
+}
+
+.tags {
+  margin-top: -1.5rem;
+  padding-bottom: 1.5em;
+}
+.tags li {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+figure {
+  margin: 1em 0;
+}
+figure figcaption {
+  font-family: monospace, monospace;
+  font-size: 0.75em;
+  text-align: center;
+  color: grey;
+}
+
+.footnote-definition sup {
+  margin-left: -1.5em;
+  float: left;
+}
+
+.footnote-definition .footnote-body {
+  margin: 1em 0;
+  padding: 0 1em;
+  border: 1px dashed rgba(37, 150, 190, 0.3);
+  background-color: rgba(200, 200, 200, 0.2);
+}
+.footnote-definition .footnote-body p:only-child {
+  margin: 0.2em 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header a + a {
+  margin-left: 1rem;
+}
+
+.posts {
+  margin: 0;
+  list-style: none;
+}
+.posts .post a {
+  display: flex;
+  padding: 0.5em 0;
+  color: black;
+}
+.posts .post a:hover, .posts .post a:focus, .posts .post a:active {
+  text-decoration: none;
+  background: rgba(200, 200, 200, 0.2);
+}
+.posts .post date {
+  font-family: monospace, monospace;
+  font-size: 0.8rem;
+  vertical-align: middle;
+  padding-right: 2rem;
+  color: grey;
+  white-space: nowrap;
+}
+
+.posts .post {
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+}
+
+.posts .post:last-child {
+  border-bottom: none;
+}
+
+.posts .post h2 {
+  margin: 0 0 0.5em 0;
+  font-size: 1.2em;
+}
+
+.posts .post p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.posts .post a {
+  display: flex;
+  padding: 1em 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.posts .post a:hover, .posts .post a:focus {
+  background-color: rgba(37, 150, 190, 0.05);
+}
+
+.posts .post date {
+  flex: 0 0 100px;
+  font-family: monospace, monospace;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.footer-content a {
+    color: #2596be;
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+/* Target all code blocks */
+pre[class*="language-"],
+code[class*="language-"],
+.highlight pre {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace !important;
+  font-size: 14px !important; /* Adjust size as needed */
+  line-height: 1.5 !important;
+}
+
+/* Target inline code */
+:not(pre) > code[class*="language-"],
+p > code,
+li > code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace !important;
+  font-size: 14px !important; 
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Mermaid diagram styles */
+.mermaid {
+    background-color: white;
+    padding: 1em;
+    margin: 1em 0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto !important;
+    margin: 0 auto;
+}
+
+/* Ensure Mermaid diagrams are responsive */
+.mermaid > svg {
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* Style Mermaid diagram text */
+.mermaid .label {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+}
+
+/* Style Mermaid nodes */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+    fill: #fff;
+    stroke: #333;
+    stroke-width: 1px;
+}
+
+/* Style Mermaid edges */
+.mermaid .edgePath .path {
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+.mermaid .arrowheadPath {
+    fill: #333;
+    stroke: none;
+}

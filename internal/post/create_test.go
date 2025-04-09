@@ -28,15 +28,7 @@ func TestCreatePost(t *testing.T) {
 
 	// Create a test config
 	cfg := &config.Config{
-		Content: struct {
-			SourceDir    string "mapstructure:\"source_dir\""
-			PostsDir     string "mapstructure:\"posts_dir\""
-			OutputDir    string "mapstructure:\"output_dir\""
-			TemplatesDir string "mapstructure:\"templates_dir\""
-			PagesDir     string "mapstructure:\"pages_dir\""
-			ImagesDir    string "mapstructure:\"images_dir\""
-			PostsPerPage int    "mapstructure:\"posts_per_page\""
-		}{
+		Content: config.ContentConfig{
 			SourceDir:    tempDir,
 			PostsDir:     "posts",
 			TemplatesDir: "templates",

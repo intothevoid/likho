@@ -3,7 +3,7 @@
 <ul>
     {{ range .Posts }}
     <li>
-        <a href="/{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a> - {{ .Date.Format "2006-01-02" }}
+        <a href="/posts/{{ .Title | urlize }}-{{ .Slug }}.html">{{ .Title }}</a> - {{ .Date.Format "2006-01-02" }}
     </li>
     {{ end }}
 </ul>
