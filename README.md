@@ -138,31 +138,6 @@ docker buildx create --use
 docker buildx build --platform linux/amd64,linux/arm64 -t yourdockerhubusername/likho:latest --push .
 ```
 
-
-## Configuration
-
-Likho uses a `config.yaml` file in the root directory for site-wide configuration. Here's an example:
-
-```yaml
-site:
-  title: "My Awesome Blog"
-  description: "A blog about awesome things"
-  baseURL: "https://example.com"
-
-content:
-  sourceDir: "content"
-  postsDir: "posts"
-
-output:
-  publicDir: "public"
-
-templates:
-  dir: "templates"
-
-static:
-  dir: "static"
-
-```
 ## Configuration
 
 Your site's configuration is stored in `config.yaml`. Here's an example configuration:
@@ -224,39 +199,6 @@ custom:
   disqus_shortname: "your-disqus-shortname"
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
-
-## Directory Structure
-
-After setting up your Likho project, your directory structure should look like this:
-
-```
-my-likho-site/
-├── config.yaml
-├── content/
-│   ├── posts/
-│   │   └── YYYY-MM-DD/
-│   │       └── post-slug.md
-│   ├── pages/
-│   │   └── page-slug.md
-│   └── images/
-├── themes/
-│   └── default/
-│       ├── theme.yaml
-│       ├── static/
-│       │   ├── css/
-│       │   │   └── main.css
-│       │   ├── js/
-│       │   └── images/
-│       └── templates/
-│           ├── base.html
-│           ├── index.html
-│           ├── post.html
-│           ├── pages.html
-│           ├── header.html
-│           └── footer.html
-└── public/
-    └── (generated files)
-```
 
 ## Themes
 
