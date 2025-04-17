@@ -200,6 +200,40 @@ custom:
 
 Ensure that your `config.yaml` file is in the root directory of your Likho project.
 
+## Directory Structure
+
+After setting up your Likho project, your directory structure should look like this:
+
+```
+my-likho-site/
+├── config.yaml
+├── content/
+│   ├── posts/
+│   │   └── YYYY-MM-DD/
+│   │       └── post-slug.md
+│   ├── pages/
+│   │   └── page-slug.md
+│   ├── images/
+│   └── other/          # Directory for static assets like text files, STL files, etc.
+├── themes/
+│   └── default/
+│       ├── theme.yaml
+│       ├── static/
+│       │   ├── css/
+│       │   │   └── main.css
+│       │   ├── js/
+│       │   └── images/
+│       └── templates/
+│           ├── base.html
+│           ├── index.html
+│           ├── post.html
+│           ├── pages.html
+│           ├── header.html
+│           └── footer.html
+└── public/
+    └── (generated files)
+```
+
 ## Themes
 
 Likho supports multiple themes. Each theme is stored in its own directory under the `themes` folder. A theme consists of:

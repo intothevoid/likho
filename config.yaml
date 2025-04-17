@@ -23,6 +23,7 @@ content:
   pages_dir: "pages"
   posts_per_page: 10
   images_dir: "images"
+  other_dir: "other"  # Directory for static assets like text files, STL files, etc.
 
 # Theme Settings
 theme:

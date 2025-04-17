@@ -13,6 +13,7 @@ func TestLoad(t *testing.T) {
 	configContent := `
 content:
   source_dir: "content"
+  other_dir: "other"
 `
 	configFile, err := os.Create("config.yaml")
 	assert.NoError(t, err)
@@ -31,4 +32,5 @@ content:
 	assert.Equal(t, "content", cfg.Content.SourceDir)
 	assert.Equal(t, "posts", cfg.Content.PostsDir)
 	assert.Equal(t, "templates", cfg.Content.TemplatesDir)
+	assert.Equal(t, "other", cfg.Content.OtherDir)
 }
