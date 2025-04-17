@@ -238,7 +238,8 @@ my-likho-site/
 │   │       └── post-slug.md
 │   ├── pages/
 │   │   └── page-slug.md
-│   └── images/
+│   ├── images/
+│   └── other/          # Directory for static assets like text files, STL files, etc.
 ├── themes/
 │   └── default/
 │       ├── theme.yaml

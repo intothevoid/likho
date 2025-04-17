@@ -72,7 +72,7 @@ func Generate(cfg *config.Config) error {
 		return err
 	}
 
-	if err := copyImages(cfg); err != nil {
+	if err := copyStaticAssets(cfg); err != nil {
 		return err
 	}
 

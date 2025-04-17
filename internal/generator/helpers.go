@@ -35,7 +35,8 @@ func urlize(s string) string {
 	return s
 }
 
-func copyImages(cfg *config.Config) error {
+func copyStaticAssets(cfg *config.Config) error {
+	// Copy images directory
 	sourceDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.ImagesDir)
 	destinationDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.ImagesDir)
 
@@ -45,7 +46,21 @@ func copyImages(cfg *config.Config) error {
 		return os.MkdirAll(destinationDir, 0755)
 	}
 
-	return copyDir(sourceDir, destinationDir)
+	if err := copyDir(sourceDir, destinationDir); err != nil {
+		return err
+	}
+
+	// Copy other directory
+	sourceOtherDir := filepath.Join(cfg.Content.SourceDir, cfg.Content.OtherDir)
+	destinationOtherDir := filepath.Join(cfg.Content.OutputDir, cfg.Content.OtherDir)
+
+	// Check if source directory exists
+	if _, err := os.Stat(sourceOtherDir); os.IsNotExist(err) {
+		// Source directory doesn't exist, create destination directory and return
+		return os.MkdirAll(destinationOtherDir, 0755)
+	}
+
+	return copyDir(sourceOtherDir, destinationOtherDir)
 }
 
 func copyDir(src, dst string) error {
@@ -152,10 +167,21 @@ func removeGeneratedFiles(dir string) error {
 }
 
 func removeImagesDir(outputDir string) error {
+	// Remove images directory
 	imagesDir := filepath.Join(outputDir, "images")
-	// Check if directory exists before trying to remove it
-	if _, err := os.Stat(imagesDir); os.IsNotExist(err) {
-		return nil
+	if _, err := os.Stat(imagesDir); !os.IsNotExist(err) {
+		if err := os.RemoveAll(imagesDir); err != nil {
+			return err
+		}
 	}
-	return os.RemoveAll(imagesDir)
+
+	// Remove other directory
+	otherDir := filepath.Join(outputDir, "other")
+	if _, err := os.Stat(otherDir); !os.IsNotExist(err) {
+		if err := os.RemoveAll(otherDir); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

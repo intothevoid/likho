@@ -35,9 +35,11 @@ public/**/*
 content/posts/**/*
 content/pages/**/*
 content/images/**/*
+content/other/**/*
 
 # build
 cmd/likho/likho
 
 # post importer
 scripts/post_importer/venv
+.aider*

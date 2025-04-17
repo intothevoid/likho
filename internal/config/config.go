@@ -36,6 +36,7 @@ type ContentConfig struct {
 	PagesDir     string `mapstructure:"pages_dir"`
 	PostsPerPage int    `mapstructure:"posts_per_page"`
 	ImagesDir    string `mapstructure:"images_dir"`
+	OtherDir     string `mapstructure:"other_dir"`
 }
 
 // ThemeConfig represents the theme configuration
@@ -116,6 +117,7 @@ func Load() (*Config, error) {
 	v.SetDefault("content.pages_dir", "pages")
 	v.SetDefault("content.posts_per_page", 10)
 	v.SetDefault("content.images_dir", "images")
+	v.SetDefault("content.other_dir", "other")
 
 	// Theme defaults
 	v.SetDefault("theme.name", "default")
