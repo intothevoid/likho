@@ -20,6 +20,11 @@ func generatePageHTML(cfg *config.Config, tmpl *template.Template, page parser.P
 	content = strings.ReplaceAll(content, "](../images/", "](/images/")
 	content = strings.ReplaceAll(content, "](./images/", "](/images/")
 
+	// Convert relative links to files in other directory to absolute paths
+	content = strings.ReplaceAll(content, "](other/", "](/other/")
+	content = strings.ReplaceAll(content, "](../other/", "](/other/")
+	content = strings.ReplaceAll(content, "](./other/", "](/other/")
+
 	data := struct {
 		Content     template.HTML
 		SiteTitle   string
