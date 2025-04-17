@@ -36,6 +36,11 @@ func generatePostHTML(cfg *config.Config, tmpl *template.Template, p post.Post, 
 	htmlStr = strings.ReplaceAll(htmlStr, "src=\"../images/", "src=\"/images/")
 	htmlStr = strings.ReplaceAll(htmlStr, "src=\"./images/", "src=\"/images/")
 
+	// Convert relative links to files in other directory to absolute paths
+	htmlStr = strings.ReplaceAll(htmlStr, "href=\"other/", "href=\"/other/")
+	htmlStr = strings.ReplaceAll(htmlStr, "href=\"../other/", "href=\"/other/")
+	htmlStr = strings.ReplaceAll(htmlStr, "href=\"./other/", "href=\"/other/")
+
 	data := struct {
 		Post        post.Post
 		Content     template.HTML
