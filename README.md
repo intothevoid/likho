@@ -1,6 +1,6 @@
 # Likho
 
-<a href="assets/logo.jpg"><img src="assets/logo.jpg" height="300px" alt="Likho Logo"></a>
+<a href="assets/logo.png"><img src="assets/logo.png" height="300px" alt="Likho Logo"></a>
 
 [![Go](https://github.com/intothevoid/likho/actions/workflows/go.yml/badge.svg)](https://github.com/intothevoid/likho/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/intothevoid/likho)](https://goreportcard.com/report/github.com/intothevoid/likho)
